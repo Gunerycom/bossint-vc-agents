@@ -1,0 +1,25 @@
+{
+  "name": "bossint-vc-agents-page",
+  "version": "1.0.0",
+  "description": "VC & Investors Intel Agents - Premium Fintech Single-Page Landing Page",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "vc",
+    "investors",
+    "agents",
+    "bossint",
+    "fintech"
+  ],
+  "author": "Bossint Intelligence",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "resend": "^6.20.0"
+  }
+}

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>VC & Investors Intel Agents | Bossint Intelligence</title>
+  <meta name="description" content="Autonomous AI agents tracking global venture capital, seed rounds, and Tier-1 VC firm activities in real time.">
+  
+  <!-- Robot Directives: Strict No Index & No Follow -->
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="bingbot" content="noindex, nofollow">
+
+  <!-- Mobile Browser Optimization & Styling -->
+  <meta name="theme-color" content="#EAE7DF">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="format-detection" content="telephone=no">
+
+  <!-- Google Fonts: Space Grotesk & Roboto (100, 300, 400, 500, 700) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Header Section -->
+    <header class="site-header" id="main-header">
+      <div class="header-inner">
+        <!-- Logo -->
+        <a href="/" class="brand-link" aria-label="Bossint Intelligence Home">
+          <img src="BOSSINT-NEW-LOGO.svg" alt="Bossint Intelligence" class="brand-logo" id="header-logo" onerror="this.src='logo.svg'">
+        </a>
+
+        <!-- Title & Subtitle Group -->
+        <div class="header-titles">
+          <div class="title-with-status">
+            <h1 class="page-title">VC & Investors Intel Agents</h1>
+            <span class="live-pill" aria-label="System Live">
+              <span class="pulse-dot"></span> Live Feed
+            </span>
+            <p class="page-subtitle">Autonomous AI agents tracking global venture capital, in real time.</p>
+          </div>
+        </div>
+
+        <!-- Global Action Group -->
+        <div class="header-meta">
+          <span class="network-status-text">4 Agents Active</span>
+          <button type="button" class="stack-subscribe-btn" id="open-fullstack-modal-btn" aria-label="Subscribe to all 4 intelligence feeds">
+            Subscribe to All Agents
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content: 4 Intel Agent Cards Grid -->
+    <main class="main-container" id="agents-container">
+      <div class="agents-grid">
+
+        <!-- Agent 01 -->
+        <article class="agent-card" id="card-agent-01" data-agent-id="c9ce09dc-833b-4ca6-b514-8bc896c47735">
+          <div class="card-header">
+            <div class="agent-topline">
+              <div class="agent-role-group">
+                <div class="grid grid-cols-3 w-[18px] h-[18px] gap-[2px]"><div class="w-1 h-1 transition-opacity duration-75 opacity-45" style="background-color: rgb(245, 158, 11); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-70" style="background-color: rgb(147, 197, 253); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-25" style="background-color: rgb(147, 197, 253); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div></div>
+                <span class="agent-role-text">Researcher Agent</span>
+              </div>
+              <span class="agent-index">24H FEED</span>
+            </div>
+            <h2 class="agent-name">US AI Funding Rounds (Last 24h)</h2>
+            <p class="agent-mission">This agent monitors 24-hour US AI funding activity and sends daily briefings to your inbox.</p>
+          </div>
+
+          <!-- Live Data Preview Feed -->
+          <div class="data-preview-section">
+            <div class="preview-meta-bar">
+              <span class="preview-label">TOP HIGHLIGHTS</span>
+              <span class="preview-indicator" id="status-c9ce09dc-833b-4ca6-b514-8bc896c47735">SYNCING</span>
+            </div>
+            <div class="feed-list scrollable-feed" id="feed-c9ce09dc-833b-4ca6-b514-8bc896c47735">
+              <!-- Loading Skeleton -->
+              <div class="feed-skeleton">
+                <div class="skeleton-line shimmer"></div>
+                <div class="skeleton-line short shimmer"></div>
+              </div>
+              <div class="feed-skeleton">
+                <div class="skeleton-line shimmer"></div>
+                <div class="skeleton-line short shimmer"></div>
+              </div>
+            </div>
+            <div class="preview-footer-cta">
+              <svg class="preview-down-arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M8 2.5v11M3.5 9 8 13.5 12.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="preview-cta-text cta-muted">There is more.</span>
+            </div>
+          </div>
+
+          <!-- Email Subscribe Module -->
+          <div class="subscribe-module">
+            <div class="subscribe-header">
+              <span class="subscribe-title">Get ALL of this agent's work in your inbox.</span>
+            </div>
+            <form class="subscribe-form" data-agent-id="c9ce09dc-833b-4ca6-b514-8bc896c47735">
+              <div class="input-group">
+                <div class="input-wrapper">
+                  <svg class="input-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path d="M3 4a2 2 0 0 0-2 2v1.161l8.441 4.221a1.25 1.25 0 0 0 1.118 0L19 7.162V6a2 2 0 0 0-2-2H3Z"/>
+                    <path d="m19 8.839-7.77 3.885a2.75 2.75 0 0 1-2.46 0L1 8.839V14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.839Z"/>
+                  </svg>
+                  <input 
+                    type="email" 
+                    class="subscribe-input" 
+                    placeholder="name@fund.com" 
+                    aria-label="Subscribe to US AI Funding Rounds"
+                    inputmode="email"
+                    autocomplete="email"
+                    autocapitalize="none"
+                    spellcheck="false"
+                    required
+                  />
+                </div>
+                <button type="submit" class="subscribe-btn" aria-label="Subscribe">
+                  <span class="btn-text">Get Intel</span>
+                  <svg class="btn-arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.333 8h9.334M8.667 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="subscribe-status" aria-live="polite"></div>
+            </form>
+          </div>
+        </article>
+
+        <!-- Agent 02 -->
+        <article class="agent-card" id="card-agent-02" data-agent-id="167023b0-3a2c-44b5-9c16-39788d6cd4b7">
+          <div class="card-header">
+            <div class="agent-topline">
+              <div class="agent-role-group">
+                <div class="grid grid-cols-3 w-[18px] h-[18px] gap-[2px]"><div class="w-1 h-1 transition-opacity duration-75 opacity-45" style="background-color: rgb(245, 158, 11); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-70" style="background-color: rgb(147, 197, 253); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-25" style="background-color: rgb(147, 197, 253); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div></div>
+                <span class="agent-role-text">Journalist Agent</span>
+              </div>
+              <span class="agent-index">WEEKLY</span>
+            </div>
+            <h2 class="agent-name">Weekly AI Investment Digest</h2>
+            <p class="agent-mission">This agent tracks weekly US AI ecosystem investments and sends digest reports to your inbox.</p>
+          </div>
+
+          <!-- Live Data Preview Feed -->
+          <div class="data-preview-section">
+            <div class="preview-meta-bar">
+              <span class="preview-label">TOP HIGHLIGHTS</span>
+              <span class="preview-indicator" id="status-167023b0-3a2c-44b5-9c16-39788d6cd4b7">SYNCING</span>
+            </div>
+            <div class="feed-list scrollable-feed" id="feed-167023b0-3a2c-44b5-9c16-39788d6cd4b7">
+              <!-- Loading Skeleton -->
+              <div class="feed-skeleton">
+                <div class="skeleton-line shimmer"></div>
+                <div class="skeleton-line short shimmer"></div>
+              </div>
+              <div class="feed-skeleton">
+                <div class="skeleton-line shimmer"></div>
+                <div class="skeleton-line short shimmer"></div>
+              </div>
+            </div>
+            <div class="preview-footer-cta">
+              <svg class="preview-down-arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M8 2.5v11M3.5 9 8 13.5 12.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="preview-cta-text cta-muted">There is more.</span>
+            </div>
+          </div>
+
+          <!-- Email Subscribe Module -->
+          <div class="subscribe-module">
+            <div class="subscribe-header">
+              <span class="subscribe-title">Get ALL of this agent's work in your inbox.</span>
+            </div>
+            <form class="subscribe-form" data-agent-id="167023b0-3a2c-44b5-9c16-39788d6cd4b7">
+              <div class="input-group">
+                <div class="input-wrapper">
+                  <svg class="input-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path d="M3 4a2 2 0 0 0-2 2v1.161l8.441 4.221a1.25 1.25 0 0 0 1.118 0L19 7.162V6a2 2 0 0 0-2-2H3Z"/>
+                    <path d="m19 8.839-7.77 3.885a2.75 2.75 0 0 1-2.46 0L1 8.839V14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.839Z"/>
+                  </svg>
+                  <input 
+                    type="email" 
+                    class="subscribe-input" 
+                    placeholder="name@fund.com" 
+                    aria-label="Subscribe to Weekly AI Investment Digest"
+                    inputmode="email"
+                    autocomplete="email"
+                    autocapitalize="none"
+                    spellcheck="false"
+                    required
+                  />
+                </div>
+                <button type="submit" class="subscribe-btn" aria-label="Subscribe">
+                  <span class="btn-text">Get Intel</span>
+                  <svg class="btn-arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.333 8h9.334M8.667 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="subscribe-status" aria-live="polite"></div>
+            </form>
+          </div>
+        </article>
+
+        <!-- Agent 03 -->
+        <article class="agent-card" id="card-agent-03" data-agent-id="1950ae01-3390-4a3f-a6c0-21a9f3aa91e9">
+          <div class="card-header">
+            <div class="agent-topline">
+              <div class="agent-role-group">
+                <div class="grid grid-cols-3 w-[18px] h-[18px] gap-[2px]"><div class="w-1 h-1 transition-opacity duration-75 opacity-45" style="background-color: rgb(245, 158, 11); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-70" style="background-color: rgb(147, 197, 253); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-25" style="background-color: rgb(147, 197, 253); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div></div>
+                <span class="agent-role-text">Researcher Agent</span>
+              </div>
+              <span class="agent-index">WEEKLY</span>
+            </div>
+            <h2 class="agent-name">MENA Investment Radar</h2>
+            <p class="agent-mission">This agent researches weekly venture capital deals across MENA and sends reports to your inbox.</p>
+          </div>
+
+          <!-- Live Data Preview Feed -->
+          <div class="data-preview-section">
+            <div class="preview-meta-bar">
+              <span class="preview-label">TOP HIGHLIGHTS</span>
+              <span class="preview-indicator" id="status-1950ae01-3390-4a3f-a6c0-21a9f3aa91e9">SYNCING</span>
+            </div>
+            <div class="feed-list scrollable-feed" id="feed-1950ae01-3390-4a3f-a6c0-21a9f3aa91e9">
+              <!-- Loading Skeleton -->
+              <div class="feed-skeleton">
+                <div class="skeleton-line shimmer"></div>
+                <div class="skeleton-line short shimmer"></div>
+              </div>
+              <div class="feed-skeleton">
+                <div class="skeleton-line shimmer"></div>
+                <div class="skeleton-line short shimmer"></div>
+              </div>
+            </div>
+            <div class="preview-footer-cta">
+              <svg class="preview-down-arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M8 2.5v11M3.5 9 8 13.5 12.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="preview-cta-text cta-muted">There is more.</span>
+            </div>
+          </div>
+
+          <!-- Email Subscribe Module -->
+          <div class="subscribe-module">
+            <div class="subscribe-header">
+              <span class="subscribe-title">Get ALL of this agent's work in your inbox.</span>
+            </div>
+            <form class="subscribe-form" data-agent-id="1950ae01-3390-4a3f-a6c0-21a9f3aa91e9">
+              <div class="input-group">
+                <div class="input-wrapper">
+                  <svg class="input-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path d="M3 4a2 2 0 0 0-2 2v1.161l8.441 4.221a1.25 1.25 0 0 0 1.118 0L19 7.162V6a2 2 0 0 0-2-2H3Z"/>
+                    <path d="m19 8.839-7.77 3.885a2.75 2.75 0 0 1-2.46 0L1 8.839V14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.839Z"/>
+                  </svg>
+                  <input 
+                    type="email" 
+                    class="subscribe-input" 
+                    placeholder="name@fund.com" 
+                    aria-label="Subscribe to MENA Investment Radar"
+                    inputmode="email"
+                    autocomplete="email"
+                    autocapitalize="none"
+                    spellcheck="false"
+                    required
+                  />
+                </div>
+                <button type="submit" class="subscribe-btn" aria-label="Subscribe">
+                  <span class="btn-text">Get Intel</span>
+                  <svg class="btn-arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.333 8h9.334M8.667 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="subscribe-status" aria-live="polite"></div>
+            </form>
+          </div>
+        </article>
+
+        <!-- Agent 04 -->
+        <article class="agent-card" id="card-agent-04" data-agent-id="dynamic-agent-04">
+          <div class="card-header">
+            <div class="agent-topline">
+              <div class="agent-role-group">
+                <div class="grid grid-cols-3 w-[18px] h-[18px] gap-[2px]"><div class="w-1 h-1 transition-opacity duration-75 opacity-45" style="background-color: rgb(245, 158, 11); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-70" style="background-color: rgb(147, 197, 253); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-25" style="background-color: rgb(147, 197, 253); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div><div class="w-1 h-1 transition-opacity duration-75 opacity-100" style="background-color: rgb(29, 78, 216); border-radius: 0px;"></div></div>
+                <span class="agent-role-text">Surveillance Agent</span>
+              </div>
+              <span class="agent-index">WEEKLY</span>
+            </div>
+            <h2 class="agent-name">Top 10 VC Leaders: Surveillance</h2>
+            <p class="agent-mission">This agent monitors weekly the top 10 Silicon Valley venture leaders and sends updates to your inbox.</p>
+          </div>
+
+          <!-- Live Data Preview Feed -->
+          <div class="data-preview-section">
+            <div class="preview-meta-bar">
+              <span class="preview-label">TOP HIGHLIGHTS</span>
+              <span class="preview-indicator" id="status-agent-04">SYNCING</span>
+            </div>
+            <div class="feed-list scrollable-feed" id="feed-agent-04">
+              <!-- Loading Skeleton -->
+              <div class="feed-skeleton">
+                <div class="skeleton-line shimmer"></div>
+                <div class="skeleton-line short shimmer"></div>
+              </div>
+              <div class="feed-skeleton">
+                <div class="skeleton-line shimmer"></div>
+                <div class="skeleton-line short shimmer"></div>
+              </div>
+            </div>
+            <div class="preview-footer-cta">
+              <svg class="preview-down-arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M8 2.5v11M3.5 9 8 13.5 12.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="preview-cta-text cta-muted">There is more.</span>
+            </div>
+          </div>
+
+          <!-- Email Subscribe Module -->
+          <div class="subscribe-module">
+            <div class="subscribe-header">
+              <span class="subscribe-title">Get ALL of this agent's work in your inbox.</span>
+            </div>
+            <form class="subscribe-form" id="form-agent-04" data-agent-id="dynamic-agent-04">
+              <div class="input-group">
+                <div class="input-wrapper">
+                  <svg class="input-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path d="M3 4a2 2 0 0 0-2 2v1.161l8.441 4.221a1.25 1.25 0 0 0 1.118 0L19 7.162V6a2 2 0 0 0-2-2H3Z"/>
+                    <path d="m19 8.839-7.77 3.885a2.75 2.75 0 0 1-2.46 0L1 8.839V14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.839Z"/>
+                  </svg>
+                  <input 
+                    type="email" 
+                    class="subscribe-input" 
+                    placeholder="name@fund.com" 
+                    aria-label="Subscribe to Top 10 VC Leaders Surveillance"
+                    inputmode="email"
+                    autocomplete="email"
+                    autocapitalize="none"
+                    spellcheck="false"
+                    required
+                  />
+                </div>
+                <button type="submit" class="subscribe-btn" aria-label="Subscribe">
+                  <span class="btn-text">Get Intel</span>
+                  <svg class="btn-arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.333 8h9.334M8.667 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="subscribe-status" aria-live="polite"></div>
+            </form>
+          </div>
+        </article>
+
+      </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="site-footer" id="main-footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <span class="footer-lead">Powered by <a href="https://bossint.ai/" class="footer-brand-link" target="_blank" rel="noopener noreferrer"><strong>bossint.ai</strong></a></span>
+          <span class="footer-divider">•</span>
+          <span class="footer-disclaimer">Real-time venture capital intelligence. Direct email dispatches only. No spam. Unsubscribe anytime.</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Subscribe to All Agents Modal -->
+  <div class="modal-backdrop" id="fullstack-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-header-titles">
+          <span class="modal-badge gold">ALL AGENTS FEED</span>
+          <h3 class="modal-title">Subscribe to All Agents</h3>
+        </div>
+        <button type="button" class="modal-close-btn" id="close-fullstack-modal-btn" aria-label="Close modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="fullstack-content">
+        <div class="fullstack-agents-list">
+          <div class="fullstack-agent-chip">
+            <span class="chip-num">01</span>
+            <span class="chip-title">US AI Funding Rounds (24h)</span>
+          </div>
+          <div class="fullstack-agent-chip">
+            <span class="chip-num">02</span>
+            <span class="chip-title">Weekly AI Investment Digest</span>
+          </div>
+          <div class="fullstack-agent-chip">
+            <span class="chip-num">03</span>
+            <span class="chip-title">MENA Investment Radar</span>
+          </div>
+          <div class="fullstack-agent-chip">
+            <span class="chip-num">04</span>
+            <span class="chip-title">Top 10 VC Leaders Surveillance</span>
+          </div>
+        </div>
+
+        <form class="fullstack-form" id="fullstack-subscribe-form">
+          <div class="input-group">
+            <div class="input-wrapper">
+              <svg class="input-icon" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M3 4a2 2 0 0 0-2 2v1.161l8.441 4.221a1.25 1.25 0 0 0 1.118 0L19 7.162V6a2 2 0 0 0-2-2H3Z"/>
+                <path d="m19 8.839-7.77 3.885a2.75 2.75 0 0 1-2.46 0L1 8.839V14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.839Z"/>
+              </svg>
+              <input 
+                type="email" 
+                class="subscribe-input" 
+                id="fullstack-email-input"
+                placeholder="name@fund.com" 
+                required 
+              />
+            </div>
+            <button type="submit" class="subscribe-btn" id="fullstack-submit-btn">
+              <span class="btn-text">Subscribe to All</span>
+            </button>
+          </div>
+          <div class="subscribe-status" id="fullstack-subscribe-status" aria-live="polite"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Verify Your Email Modal (shown after successful subscription) -->
+  <div class="modal-backdrop" id="verify-email-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-card verify-modal-card">
+      <div class="verify-modal-content">
+        <div class="verify-icon-circle">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+        </div>
+        <h3 class="verify-title">Verify Your Email</h3>
+        <p class="verify-body">
+          We've sent a verification link to
+        </p>
+        <div class="verify-email-chip" id="verify-email-address">your@email.com</div>
+        <p class="verify-spam-note" style="margin-top: 14px; margin-bottom: 6px; font-size: 13px; color: #1E293B; font-weight: 500;">
+          Click the link in the email to activate continuous Bossint AI agent intel.
+        </p>
+        <p class="verify-spam-note">
+          Don't see it? Check your spam or promotions folder.
+        </p>
+        <button type="button" class="verify-dismiss-btn" id="verify-dismiss-btn">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
