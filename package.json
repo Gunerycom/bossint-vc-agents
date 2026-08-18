@@ -14,7 +14,7 @@
     "bossint",
     "fintech"
   ],
-  "author": "Bossint Intelligence",
+  "author": "Bossint AI",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
