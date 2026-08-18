@@ -7,7 +7,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const BOSSINT_API_HOST = process.env.BOSSINT_API_HOST || 'https://lab.bossint.ai';
 const BOSSINT_API_KEY = process.env.BOSSINT_API_KEY || '';
-const AGENT_04_ID = process.env.AGENT_04_ID || '6b3e7f12-9c44-482a-a9e1-7e82b61cd214';
+const AGENT_04_ID = process.env.AGENT_04_ID || '48e1324f-e880-4592-b630-f1c01f076ade';
 
 const subscriberStore = require('./services/subscriberStore');
 const emailService = require('./services/emailService');
@@ -24,7 +24,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), { index: false }));
 
 // Realistic fallback intelligence signals for each agent when in offline/demo mode
 const FALLBACK_SIGNALS = {
@@ -174,7 +174,12 @@ const VC_LEADERS_FALLBACK = {
 const AGENT_NAMES = {
   'c9ce09dc-833b-4ca6-b514-8bc896c47735': 'US AI Funding Rounds (Last 24h)',
   '167023b0-3a2c-44b5-9c16-39788d6cd4b7': 'Weekly AI Investment Digest',
-  '1950ae01-3390-4a3f-a6c0-21a9f3aa91e9': 'MENA Investment Radar'
+  '1950ae01-3390-4a3f-a6c0-21a9f3aa91e9': 'MENA Investment Radar',
+  'defense-contracts-24h': 'Global Defense Contracts & Tenders (Last 24h)',
+  'dual-use-investments': 'Dual-Use & Defense Tech Investment Radar',
+  'nato-allied-intel': 'NATO & European Defense Tech Supply Chain',
+  'defense-founders-surveillance': 'Top 10 Defense Tech Leaders: Weekly Surveillance',
+  'defense-all': 'Full Defense & Aerospace Intelligence Stack'
 };
 // Always register Agent 04 by its dynamic env ID
 if (AGENT_04_ID) {
@@ -366,18 +371,17 @@ app.post('/api/subscribe', async (req, res) => {
 
   // If already verified, dispatch briefing immediately
   if (subResult.isVerified) {
-    (async () => {
-      try {
-        const livePayload = await getDealsForAgent(targetAgentId);
-        if (isAll) {
-          await emailService.sendFullStackWelcomeEmail(email, livePayload, token);
-        } else {
-          await emailService.sendWelcomeEmail(email, agentName, livePayload, token);
-        }
-      } catch (err) {
-        console.error(`[SUBSCRIBE] Error dispatching briefing to ${email}:`, err.message);
+    let emailResult = null;
+    try {
+      const livePayload = await getDealsForAgent(targetAgentId);
+      if (isAll) {
+        emailResult = await emailService.sendFullStackWelcomeEmail(email, livePayload, token);
+      } else {
+        emailResult = await emailService.sendWelcomeEmail(email, agentName, livePayload, token);
       }
-    })();
+    } catch (err) {
+      console.error(`[SUBSCRIBE] Error dispatching briefing to ${email}:`, err.message);
+    }
 
     return res.json({
       success: true,
@@ -386,18 +390,18 @@ app.post('/api/subscribe', async (req, res) => {
       requiresVerification: false,
       email,
       agentId: targetAgentId,
-      agentName
+      agentName,
+      emailDispatched: emailResult?.success ?? true
     });
   }
 
   // Otherwise, send verification email first (Double Opt-In Flow)
-  (async () => {
-    try {
-      await emailService.sendVerificationEmail(email, agentName, verifyToken, token);
-    } catch (err) {
-      console.error(`[SUBSCRIBE] Error dispatching verification email to ${email}:`, err.message);
-    }
-  })();
+  let verifyResult = null;
+  try {
+    verifyResult = await emailService.sendVerificationEmail(email, agentName, verifyToken, token);
+  } catch (err) {
+    console.error(`[SUBSCRIBE] Error dispatching verification email to ${email}:`, err.message);
+  }
 
   return res.json({
     success: true,
@@ -406,7 +410,8 @@ app.post('/api/subscribe', async (req, res) => {
     requiresVerification: true,
     email,
     agentId: targetAgentId,
-    agentName
+    agentName,
+    emailDispatched: verifyResult?.success ?? false
   });
 });
 
@@ -429,18 +434,16 @@ app.get('/verify', async (req, res) => {
   const isAll = agentId === 'all' || agentId === 'full-stack';
 
   // Automatically dispatch initial intelligence briefing upon verification
-  (async () => {
-    try {
-      const livePayload = await getDealsForAgent(agentId);
-      if (isAll) {
-        await emailService.sendFullStackWelcomeEmail(email, livePayload, sub.unsubscribeToken);
-      } else {
-        await emailService.sendWelcomeEmail(email, agentName, livePayload, sub.unsubscribeToken);
-      }
-    } catch (err) {
-      console.error(`[VERIFY] Error dispatching initial briefing to ${email}:`, err.message);
+  try {
+    const livePayload = await getDealsForAgent(agentId);
+    if (isAll) {
+      await emailService.sendFullStackWelcomeEmail(email, livePayload, sub.unsubscribeToken);
+    } else {
+      await emailService.sendWelcomeEmail(email, agentName, livePayload, sub.unsubscribeToken);
     }
-  })();
+  } catch (err) {
+    console.error(`[VERIFY] Error dispatching initial briefing to ${email}:`, err.message);
+  }
 
   const html = emailTemplates.renderVerificationConfirmationHtml({
     email,
@@ -584,7 +587,16 @@ app.post('/api/admin/test-email', async (req, res) => {
   res.json(result);
 });
 
-// Fallback to index.html for root or unknown routes
+// Explicit VC route & Root
+app.get('/vc', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Fallback to index.html for unknown routes
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

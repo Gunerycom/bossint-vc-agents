@@ -29,7 +29,7 @@ const AGENTS = [
   },
   {
     index: '04',
-    id: 'dynamic-agent-04',
+    id: '48e1324f-e880-4592-b630-f1c01f076ade',
     name: 'Top 10 VC Leaders: Weekly Surveillance',
     statusElId: 'status-agent-04',
     feedElId: 'feed-agent-04'
@@ -82,6 +82,7 @@ async function initConfiguration() {
 async function fetchAgentSignals(agent) {
   const feedEl = document.getElementById(agent.feedElId);
   const statusEl = document.getElementById(agent.statusElId);
+  if (!feedEl) return;
 
   try {
     const response = await fetch(`/api/proxy/agent/${agent.id}`);

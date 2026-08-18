@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { Resend } = require('resend');
 const emailTemplates = require('./emailTemplates');
 const subscriberStore = require('./subscriberStore');
@@ -18,7 +19,8 @@ function getFromAddress() {
 }
 
 function getBaseUrl() {
-  return process.env.APP_URL || 'http://localhost:3000';
+  const url = process.env.APP_URL || 'http://localhost:3000';
+  return url.replace(/\/+$/, '');
 }
 
 function buildUnsubscribeUrl(token) {
@@ -51,18 +53,23 @@ async function sendWelcomeEmail(toEmail, agentName = 'VC & Investors Intel Agent
   }
 
   try {
-    const data = await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from,
       to: [toEmail],
       subject: agentName,
       html
     });
 
+    if (error) {
+      console.error(`[EmailService] Resend API rejected welcome email to ${toEmail}:`, error);
+      return { success: false, error: error.message || error };
+    }
+
     subscriberStore.recordEmailSent(toEmail);
-    console.log(`[EmailService] Welcome email delivered to ${toEmail}. Resend ID:`, data?.data?.id || data?.id || JSON.stringify(data));
+    console.log(`[EmailService] Welcome email delivered to ${toEmail}. Resend ID:`, data?.id || JSON.stringify(data));
     return { success: true, data };
   } catch (err) {
-    console.error(`[EmailService] Error sending welcome email to ${toEmail}:`, err.message);
+    console.error(`[EmailService] Exception sending welcome email to ${toEmail}:`, err.message);
     return { success: false, error: err.message };
   }
 }
@@ -90,18 +97,23 @@ async function sendFullStackWelcomeEmail(toEmail, sampleDeals = [], token = '') 
   }
 
   try {
-    const data = await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from,
       to: [toEmail],
       subject: `Full VC Intelligence Stack`,
       html
     });
 
+    if (error) {
+      console.error(`[EmailService] Resend API rejected full stack welcome email to ${toEmail}:`, error);
+      return { success: false, error: error.message || error };
+    }
+
     subscriberStore.recordEmailSent(toEmail);
-    console.log(`[EmailService] Full Stack Welcome email delivered to ${toEmail}. Resend ID:`, data?.data?.id || data?.id || JSON.stringify(data));
+    console.log(`[EmailService] Full Stack Welcome email delivered to ${toEmail}. Resend ID:`, data?.id || JSON.stringify(data));
     return { success: true, data };
   } catch (err) {
-    console.error(`[EmailService] Error sending full stack welcome email to ${toEmail}:`, err.message);
+    console.error(`[EmailService] Exception sending full stack welcome email to ${toEmail}:`, err.message);
     return { success: false, error: err.message };
   }
 }
@@ -142,14 +154,20 @@ async function sendAgentUpdateEmail(recipients, updatePayload) {
     });
 
     try {
-      const res = await resend.emails.send({
+      const { data, error } = await resend.emails.send({
         from,
         to: [email],
         subject: agentName,
         html
       });
-      subscriberStore.recordEmailSent(email);
-      results.push({ email, success: true, id: res?.data?.id || res?.id });
+
+      if (error) {
+        console.error(`[EmailService] Failed sending alert to ${email}:`, error);
+        results.push({ email, success: false, error: error.message || error });
+      } else {
+        subscriberStore.recordEmailSent(email);
+        results.push({ email, success: true, id: data?.id });
+      }
     } catch (err) {
       console.error(`[EmailService] Failed sending alert to ${email}:`, err.message);
       results.push({ email, success: false, error: err.message });
@@ -187,17 +205,22 @@ async function sendVerificationEmail(toEmail, agentName = 'VC Intelligence Feed'
   }
 
   try {
-    const data = await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from,
       to: [toEmail],
       subject: `Verify your email: ${agentName}`,
       html
     });
 
-    console.log(`[EmailService] Verification email dispatched to ${toEmail}. Resend ID:`, data?.data?.id || data?.id || JSON.stringify(data));
+    if (error) {
+      console.error(`[EmailService] Resend API rejected verification email to ${toEmail}:`, error);
+      return { success: false, error: error.message || error };
+    }
+
+    console.log(`[EmailService] Verification email dispatched to ${toEmail}. Resend ID:`, data?.id || JSON.stringify(data));
     return { success: true, data };
   } catch (err) {
-    console.error(`[EmailService] Error sending verification email to ${toEmail}:`, err.message);
+    console.error(`[EmailService] Exception sending verification email to ${toEmail}:`, err.message);
     return { success: false, error: err.message };
   }
 }

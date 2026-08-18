@@ -186,7 +186,39 @@
     "subscribedAt": "2026-08-18T16:43:30.711Z",
     "verifiedAt": "2026-08-18T16:44:50.346Z",
     "lastConfirmedAt": "2026-08-18T16:44:50.346Z",
-    "lastEmailedAt": "2026-08-18T16:44:51.895Z",
+    "lastEmailedAt": "2026-08-18T22:56:02.449Z",
+    "emailsSentCount": 2
+  },
+  {
+    "id": "sub_1787092881764_d76e3a",
+    "email": "investor@defense-fund.com",
+    "agentId": "defense-contracts-24h",
+    "agentName": "Global Defense Contracts & Tenders (Last 24h)",
+    "status": "pending_verification",
+    "verified": false,
+    "frequency": "all",
+    "verifyToken": "3c4ff1f28115367e13db03ad6cf420dda8a8",
+    "unsubscribeToken": "7394500070dfcd13323253f4306e2f62eb8e",
+    "subscribedAt": "2026-08-18T22:41:21.764Z",
+    "verifiedAt": null,
+    "lastConfirmedAt": "2026-08-18T22:41:21.764Z",
+    "lastEmailedAt": null,
+    "emailsSentCount": 0
+  },
+  {
+    "id": "sub_1787093761271_c2da3e",
+    "email": "toniqbranco@gmail.com",
+    "agentId": "1950ae01-3390-4a3f-a6c0-21a9f3aa91e9",
+    "agentName": "MENA Investment Radar",
+    "status": "active",
+    "verified": true,
+    "frequency": "all",
+    "verifyToken": "46137cf10ba5e4672a5d241201c8ee0e111a",
+    "unsubscribeToken": "ee39d9e35761898cbcb47bb6155973edd5a9",
+    "subscribedAt": "2026-08-18T22:56:01.270Z",
+    "verifiedAt": "2026-08-18T22:56:01.270Z",
+    "lastConfirmedAt": "2026-08-18T22:56:01.270Z",
+    "lastEmailedAt": "2026-08-18T22:56:02.449Z",
     "emailsSentCount": 1
   }
 ]

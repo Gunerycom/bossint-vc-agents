@@ -2,28 +2,28 @@
   "c9ce09dc-833b-4ca6-b514-8bc896c47735": {
     "agentName": "US AI Funding Rounds (Last 24h)",
     "last_run_at": "2026-08-18T09:01:41Z",
-    "last_checked_at": "2026-08-18T21:38:53.992Z",
+    "last_checked_at": "2026-08-18T22:38:54.366Z",
     "fingerprint": "2026-08-18T09:01:41Z_deals_13_Wispr Flow raises $280M Series B",
     "dealsCount": 13
   },
   "167023b0-3a2c-44b5-9c16-39788d6cd4b7": {
     "agentName": "Weekly AI Investment Digest",
     "last_run_at": "2026-08-17T08:00:43Z",
-    "last_checked_at": "2026-08-18T21:38:54.403Z",
+    "last_checked_at": "2026-08-18T22:38:54.673Z",
     "fingerprint": "2026-08-17T08:00:43Z_deals_18_Databricks raises $5 billion (Series at $190B valuation)",
     "dealsCount": 18
   },
   "1950ae01-3390-4a3f-a6c0-21a9f3aa91e9": {
     "agentName": "MENA Investment Radar",
     "last_run_at": "2026-08-17T17:17:14Z",
-    "last_checked_at": "2026-08-18T21:38:54.706Z",
+    "last_checked_at": "2026-08-18T22:38:54.993Z",
     "fingerprint": "2026-08-17T17:17:14Z_deals_4_Yuno (Qatar)",
     "dealsCount": 4
   },
   "48e1324f-e880-4592-b630-f1c01f076ade": {
     "agentName": "Top 10 VC Leaders: Weekly Surveillance",
     "last_run_at": "2026-08-17T04:54:07Z",
-    "last_checked_at": "2026-08-18T21:38:55.012Z",
+    "last_checked_at": "2026-08-18T22:38:55.281Z",
     "fingerprint": "2026-08-17T04:54:07Z_deals_10_Attended Outside Lands festival on Aug 10, teamed up with Keith Rabois for the first time since PayPal on WithCoverage's $42M Series B led by Sequoia and Khosla on Aug 12, and was ranked at ~$1.5B net worth on Aug 14.",
     "dealsCount": 10
   }

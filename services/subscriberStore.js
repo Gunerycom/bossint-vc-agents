@@ -2,18 +2,38 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const DATA_DIR = path.join(__dirname, '..', 'data');
+const isVercel = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+const DATA_DIR = isVercel ? path.join('/tmp', 'data') : path.join(__dirname, '..', 'data');
 const SUBSCRIBERS_FILE = path.join(DATA_DIR, 'subscribers.json');
+const ORIGINAL_DATA_FILE = path.join(__dirname, '..', 'data', 'subscribers.json');
+
+// In-memory fallback if disk is completely unavailable
+let memorySubscribers = null;
 
 /**
  * Ensures the data directory and subscribers JSON file exist
  */
 function ensureStorage() {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
-  if (!fs.existsSync(SUBSCRIBERS_FILE)) {
-    fs.writeFileSync(SUBSCRIBERS_FILE, JSON.stringify([], null, 2), 'utf8');
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    if (!fs.existsSync(SUBSCRIBERS_FILE)) {
+      // If deployed on Vercel, copy initial seeded data from bundle if it exists
+      if (isVercel && fs.existsSync(ORIGINAL_DATA_FILE)) {
+        try {
+          const seeded = fs.readFileSync(ORIGINAL_DATA_FILE, 'utf8');
+          fs.writeFileSync(SUBSCRIBERS_FILE, seeded, 'utf8');
+        } catch (e) {
+          fs.writeFileSync(SUBSCRIBERS_FILE, JSON.stringify([], null, 2), 'utf8');
+        }
+      } else {
+        fs.writeFileSync(SUBSCRIBERS_FILE, JSON.stringify([], null, 2), 'utf8');
+      }
+    }
+  } catch (err) {
+    // Read-only filesystem warning
+    if (!memorySubscribers) memorySubscribers = [];
   }
 }
 
@@ -31,27 +51,17 @@ function generateToken() {
 function readSubscribers() {
   ensureStorage();
   try {
-    const raw = fs.readFileSync(SUBSCRIBERS_FILE, 'utf8');
-    const list = JSON.parse(raw) || [];
-    
-    // Ensure all subscribers have tokens for backwards compatibility
-    let modified = false;
-    list.forEach(s => {
-      if (!s.unsubscribeToken) {
-        s.unsubscribeToken = generateToken();
-        modified = true;
-      }
-      if (s.emailsSentCount === undefined) {
-        s.emailsSentCount = 0;
-        modified = true;
-      }
-    });
-
-    if (modified) {
-      writeSubscribers(list);
+    if (fs.existsSync(SUBSCRIBERS_FILE)) {
+      const raw = fs.readFileSync(SUBSCRIBERS_FILE, 'utf8');
+      const list = JSON.parse(raw) || [];
+      memorySubscribers = list;
+      return list;
+    } else if (memorySubscribers) {
+      return memorySubscribers;
     }
-    return list;
+    return [];
   } catch (err) {
+    if (memorySubscribers) return memorySubscribers;
     console.error('[SubscriberStore] Error reading subscribers file:', err.message);
     return [];
   }
@@ -62,6 +72,7 @@ function readSubscribers() {
  * @param {Array} subscribers 
  */
 function writeSubscribers(subscribers) {
+  memorySubscribers = subscribers;
   ensureStorage();
   try {
     const tempPath = `${SUBSCRIBERS_FILE}.tmp`;
