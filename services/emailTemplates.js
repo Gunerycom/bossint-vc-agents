@@ -24,32 +24,7 @@ function getEmailHeader(pillText = 'INTELLIGENCE DISPATCH', pillColor = '#1E4ED8
             <tr>
               <td valign="middle" align="left">
                 <a href="https://agents.bossint.ai/vc" target="_blank" style="text-decoration: none; display: inline-block; vertical-align: middle;">
-                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="display: inline-table; vertical-align: middle;">
-                    <tr>
-                      <td valign="middle" style="padding-right: 8px;">
-                        <table role="presentation" cellpadding="0" cellspacing="1" border="0" style="width: 20px; height: 20px;">
-                          <tr>
-                            <td style="width: 5px; height: 5px; background-color: #F59E0B; font-size: 1px; line-height: 1px;">&nbsp;</td>
-                            <td style="width: 5px; height: 5px; background-color: #93C5FD; font-size: 1px; line-height: 1px;">&nbsp;</td>
-                            <td style="width: 5px; height: 5px; background-color: #1E4ED8; font-size: 1px; line-height: 1px;">&nbsp;</td>
-                          </tr>
-                          <tr>
-                            <td style="width: 5px; height: 5px; background-color: #93C5FD; font-size: 1px; line-height: 1px;">&nbsp;</td>
-                            <td style="width: 5px; height: 5px; background-color: #1E4ED8; font-size: 1px; line-height: 1px;">&nbsp;</td>
-                            <td style="width: 5px; height: 5px; background-color: #1E4ED8; font-size: 1px; line-height: 1px;">&nbsp;</td>
-                          </tr>
-                          <tr>
-                            <td style="width: 5px; height: 5px; background-color: #1E4ED8; font-size: 1px; line-height: 1px;">&nbsp;</td>
-                            <td style="width: 5px; height: 5px; background-color: #1E4ED8; font-size: 1px; line-height: 1px;">&nbsp;</td>
-                            <td style="width: 5px; height: 5px; background-color: #1E4ED8; font-size: 1px; line-height: 1px;">&nbsp;</td>
-                          </tr>
-                        </table>
-                      </td>
-                      <td valign="middle" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 19px; font-weight: 800; color: #1E4ED8; letter-spacing: -0.03em; line-height: 1; text-decoration: none;">
-                        bossint<span style="color: #1E4ED8;">.ai</span>
-                      </td>
-                    </tr>
-                  </table>
+                  <img src="https://agents.bossint.ai/BOSSINT-NEW-LOGO.svg" alt="Bossint AI" width="130" height="20" style="display: block; width: 130px; height: auto; max-height: 22px; border: 0; outline: none; text-decoration: none;" />
                 </a>
               </td>
               <td valign="middle" align="right">
