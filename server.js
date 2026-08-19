@@ -348,7 +348,7 @@ app.get('/api/proxy/agent/:agentId', async (req, res) => {
 
 // POST /api/subscribe (Supports individual agent or 'all' agents)
 app.post('/api/subscribe', async (req, res) => {
-  const { email, agentId = 'all', frequency = 'all' } = req.body || {};
+  const { email, agentId = 'all', frequency = 'all', isClientVerified = false } = req.body || {};
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!email || !emailRegex.test(email)) {
@@ -363,7 +363,7 @@ app.post('/api/subscribe', async (req, res) => {
   const agentName = isAll ? 'Full VC Intelligence Stack' : (AGENT_NAMES[agentId] || 'VC & Investors Intel Agents');
 
   // Persist subscriber to disk
-  const subResult = subscriberStore.addSubscriber(email, targetAgentId, agentName, frequency);
+  const subResult = subscriberStore.addSubscriber(email, targetAgentId, agentName, frequency, isClientVerified);
   const token = subResult.subscriber?.unsubscribeToken || '';
   const verifyToken = subResult.verifyToken || subResult.subscriber?.verifyToken || '';
 

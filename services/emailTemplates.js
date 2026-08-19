@@ -761,6 +761,12 @@ function renderVerificationConfirmationHtml({ email, agentName, dashboardUrl = '
       <a href="${escapeHtml(dashboardUrl)}" class="btn">View Live Feed &rarr;</a>
     </div>
   </div>
+  <script>
+    try {
+      localStorage.setItem('bossint_verified_' + ${JSON.stringify(String(email).trim().toLowerCase())}, 'true');
+      localStorage.setItem('bossint_last_verified_email', ${JSON.stringify(String(email).trim().toLowerCase())});
+    } catch (e) {}
+  </script>
 </body>
 </html>
   `;

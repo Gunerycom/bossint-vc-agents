@@ -93,12 +93,12 @@ function writeSubscribers(subscribers) {
  * @param {string} frequency 
  * @returns {Object} { isNew: boolean, isVerified: boolean, subscriber: Object, verifyToken: string }
  */
-function addSubscriber(email, agentId = 'all', agentName = 'VC Intelligence Feed', frequency = 'all') {
+function addSubscriber(email, agentId = 'all', agentName = 'VC Intelligence Feed', frequency = 'all', isClientVerified = false) {
   const normalizedEmail = email.trim().toLowerCase();
   const subscribers = readSubscribers();
 
-  // Check if this email is already verified globally in our system
-  const isGloballyVerified = subscribers.some(
+  // Check if this email is already verified globally in our system or via client
+  const isGloballyVerified = Boolean(isClientVerified) || subscribers.some(
     s => s.email.toLowerCase() === normalizedEmail && s.verified === true && s.status === 'active'
   );
 
@@ -126,7 +126,7 @@ function addSubscriber(email, agentId = 'all', agentName = 'VC Intelligence Feed
       isNew: false,
       isVerified: isAlreadyVerified,
       subscriber: sub,
-      verifyToken: sub.verifyToken
+      verifyToken: isAlreadyVerified ? '' : sub.verifyToken
     };
   }
 

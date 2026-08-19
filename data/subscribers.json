@@ -220,5 +220,37 @@
     "lastConfirmedAt": "2026-08-18T22:56:01.270Z",
     "lastEmailedAt": "2026-08-18T22:56:02.449Z",
     "emailsSentCount": 1
+  },
+  {
+    "id": "sub_1787106327340_317d36",
+    "email": "onetime.verification.test@fund.vc",
+    "agentId": "c9ce09dc-833b-4ca6-b514-8bc896c47735",
+    "agentName": "Full VC Intelligence Stack",
+    "status": "active",
+    "verified": true,
+    "frequency": "all",
+    "verifyToken": "3973377d36ca3d3ed270966664d78b9a1859",
+    "unsubscribeToken": "412b2c6e4c5fe41d7e669f73d4e390c450be",
+    "subscribedAt": "2026-08-19T02:25:27.338Z",
+    "verifiedAt": "2026-08-19T02:25:28.246Z",
+    "lastConfirmedAt": "2026-08-19T02:25:31.225Z",
+    "lastEmailedAt": "2026-08-19T02:25:33.307Z",
+    "emailsSentCount": 2
+  },
+  {
+    "id": "sub_1787106328258_cceae8",
+    "email": "onetime.verification.test@fund.vc",
+    "agentId": "167023b0-3a2c-44b5-9c16-39788d6cd4b7",
+    "agentName": "Weekly AI Investment Digest",
+    "status": "active",
+    "verified": true,
+    "frequency": "all",
+    "verifyToken": "fad9305a6a826370c472287d599812b6e1d0",
+    "unsubscribeToken": "51679eeb40411c7813a8b3f55b63c44133b1",
+    "subscribedAt": "2026-08-19T02:25:28.257Z",
+    "verifiedAt": "2026-08-19T02:25:28.257Z",
+    "lastConfirmedAt": "2026-08-19T02:25:28.257Z",
+    "lastEmailedAt": "2026-08-19T02:25:33.307Z",
+    "emailsSentCount": 2
   }
 ]

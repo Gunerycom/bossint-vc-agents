@@ -360,6 +360,26 @@ function renderErrorState(container) {
 }
 
 /**
+ * Local verification state helpers
+ */
+function isEmailLocallyVerified(email) {
+  if (!email) return false;
+  try {
+    return localStorage.getItem('bossint_verified_' + email.trim().toLowerCase()) === 'true';
+  } catch (e) {
+    return false;
+  }
+}
+
+function markEmailLocallyVerified(email) {
+  if (!email) return;
+  try {
+    localStorage.setItem('bossint_verified_' + email.trim().toLowerCase(), 'true');
+    localStorage.setItem('bossint_last_verified_email', email.trim().toLowerCase());
+  } catch (e) {}
+}
+
+/**
  * Initializes email subscribe forms with client validation and inline success flow
  */
 function initSubscribeForms() {
@@ -370,6 +390,14 @@ function initSubscribeForms() {
     const button = form.querySelector('.subscribe-btn');
     const status = form.querySelector('.subscribe-status');
     const agentId = form.getAttribute('data-agent-id') || 'general';
+
+    // Prefill with last known verified email if input is empty
+    try {
+      const savedEmail = localStorage.getItem('bossint_last_verified_email');
+      if (savedEmail && input && !input.value) {
+        input.value = savedEmail;
+      }
+    } catch (e) {}
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -391,11 +419,13 @@ function initSubscribeForms() {
       status.textContent = '';
       status.className = 'subscribe-status';
 
+      const isClientVerified = isEmailLocallyVerified(email);
+
       try {
         const response = await fetch('/api/subscribe', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, agentId })
+          body: JSON.stringify({ email, agentId, isClientVerified })
         });
 
         const result = await response.json();
@@ -404,15 +434,19 @@ function initSubscribeForms() {
           // Success State
           status.innerHTML = `
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            ${escapeHtml(result.message || "You're in — welcome briefing incoming")}
+            ${escapeHtml(result.message || "Subscription active — intelligence briefing dispatched")}
           `;
           status.className = 'subscribe-status success';
-          input.value = '';
           button.innerHTML = '<span class="btn-text">Subscribed</span>';
 
-          // Show verify email popup
-          const agentName = result.agentName || 'VC Intelligence Feed';
-          showVerifyEmailPopup(email, agentName);
+          // ONLY show verify popup if verification is actually needed (first time subscriber)
+          if (result.requiresVerification) {
+            const agentName = result.agentName || 'VC Intelligence Feed';
+            showVerifyEmailPopup(email, agentName);
+          } else {
+            // Already verified user!
+            markEmailLocallyVerified(email);
+          }
 
           // Reset button text after 4 seconds
           setTimeout(() => {
@@ -447,7 +481,7 @@ function initFullStackModal() {
   const fullstackStatus = document.getElementById('fullstack-subscribe-status');
   const fullstackSubmit = document.getElementById('fullstack-submit-btn');
 
-  // Open Modal
+  // Prefill modal input with last verified email if available
   if (openFullstackBtn && fullstackModal) {
     openFullstackBtn.addEventListener('click', () => {
       if (fullstackStatus) {
@@ -455,7 +489,12 @@ function initFullStackModal() {
         fullstackStatus.className = 'subscribe-status';
       }
       if (fullstackInput) {
-        fullstackInput.value = '';
+        try {
+          const savedEmail = localStorage.getItem('bossint_last_verified_email');
+          if (savedEmail && !fullstackInput.value) {
+            fullstackInput.value = savedEmail;
+          }
+        } catch (e) {}
         fullstackInput.focus();
       }
       fullstackModal.classList.add('active');
@@ -480,30 +519,41 @@ function initFullStackModal() {
       fullstackSubmit.innerHTML = '<span class="btn-text">Subscribing All...</span>';
       fullstackStatus.textContent = '';
 
+      const isClientVerified = isEmailLocallyVerified(email);
+
       try {
         const res = await fetch('/api/subscribe', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, agentId: 'all' })
+          body: JSON.stringify({ email, agentId: 'all', isClientVerified })
         });
         const json = await res.json();
 
         if (res.ok && json.success) {
           fullstackStatus.innerHTML = `
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            Subscribed to all agents!
+            ${escapeHtml(json.message || "Subscribed to all agents!")}
           `;
           fullstackStatus.className = 'subscribe-status success';
-          fullstackInput.value = '';
           fullstackSubmit.innerHTML = '<span class="btn-text">Subscribed</span>';
 
-          // Close fullstack modal and show verify popup
-          setTimeout(() => {
-            fullstackModal.classList.remove('active');
-            fullstackSubmit.disabled = false;
-            fullstackSubmit.innerHTML = '<span class="btn-text">Subscribe to All</span>';
-            showVerifyEmailPopup(email, 'Full VC Intelligence Stack');
-          }, 800);
+          if (json.requiresVerification) {
+            // First time subscriber: show verify popup
+            setTimeout(() => {
+              fullstackModal.classList.remove('active');
+              fullstackSubmit.disabled = false;
+              fullstackSubmit.innerHTML = '<span class="btn-text">Subscribe to All</span>';
+              showVerifyEmailPopup(email, 'Full VC Intelligence Stack');
+            }, 800);
+          } else {
+            // Already verified user: directly close modal without verification popup
+            markEmailLocallyVerified(email);
+            setTimeout(() => {
+              fullstackModal.classList.remove('active');
+              fullstackSubmit.disabled = false;
+              fullstackSubmit.innerHTML = '<span class="btn-text">Subscribe to All</span>';
+            }, 1200);
+          }
         } else {
           fullstackStatus.textContent = json.message || 'Subscription error.';
           fullstackStatus.className = 'subscribe-status error';
