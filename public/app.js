@@ -121,43 +121,102 @@ async function fetchAgentSignals(agent) {
 function extractSignals(payload) {
   if (!payload) return [];
 
-  const data = payload.data || payload;
-  const items = [];
-  const defaultTime = data.last_run_ago || 'Recent';
+  const raw = payload.data || payload;
+  const dataWrapper = raw.data || raw;
+  const rawList = Array.isArray(dataWrapper.data) ? dataWrapper.data : (Array.isArray(dataWrapper) ? dataWrapper : (Array.isArray(raw.items) ? raw.items : []));
+  const defaultTime = raw.last_run_ago || 'Recent';
 
-  // 1. Check latest_change_set (Structured Deals & Snapshots)
-  if (data.latest_change_set) {
-    const lcs = data.latest_change_set;
+  // 1. Direct items from /latest endpoint:
+  if (rawList.length > 0) {
+    // Case A: Structured report (MENA Radar)
+    if (rawList[0].notable_deals || rawList[0].weekly_highlights || rawList[0].summary || rawList[0].key_findings) {
+      const reportObj = rawList[0];
+      const parsedList = [];
+      const text = reportObj.notable_deals || reportObj.weekly_highlights || reportObj.key_findings || '';
+      const lines = text.split('\n');
+      for (const l of lines) {
+        const clean = l.replace(/^[-*•]\s*/, '').replace(/\*\*/g, '').trim();
+        if (!clean || clean.startsWith('#') || !clean.includes(':')) continue;
+        const [header, ...rest] = clean.split(':');
+        const body = rest.join(':').trim();
+        parsedList.push({
+          title: header.trim(),
+          timestamp: 'Weekly',
+          category: 'MENA Round',
+          amount: '',
+          lead: body,
+          source_link: ''
+        });
+      }
+      if (parsedList.length > 0) return parsedList;
+      if (reportObj.headline || reportObj.summary) {
+        return [{
+          title: reportObj.headline || 'MENA Venture Capital Weekly Briefing',
+          timestamp: 'Weekly',
+          category: 'Briefing',
+          amount: '',
+          lead: reportObj.summary || '',
+          source_link: ''
+        }];
+      }
+    }
 
-    // Check new items in change set
+    // Case B: VC Leaders (Agent 04)
+    if (rawList[0].name && rawList[0].activity_summary) {
+      const active = [];
+      const inactive = [];
+      for (const l of rawList) {
+        if (!l.name || !l.activity_summary) continue;
+        const isNoActivity = l.activity_summary.toLowerCase().startsWith('no significant activity');
+        const item = {
+          title: l.activity_summary,
+          timestamp: l.period ? l.period.split(',')[0] : defaultTime,
+          category: l.name,
+          amount: '',
+          lead: l.activity_summary,
+          source_link: ''
+        };
+        if (isNoActivity) inactive.push(item);
+        else active.push(item);
+      }
+      return [...active, ...inactive];
+    }
+
+    // Case C: Deal Rounds (Agent 1 & Agent 2)
+    if (rawList[0].company || rawList[0].investment_value) {
+      return rawList.map(r => {
+        const amountVal = formatAmount(r.investment_value || '');
+        return {
+          title: r.company ? `${r.company} raises ${r.investment_value || ''}`.trim() : (r.title || 'Deal'),
+          timestamp: formatShortTime(r.date, defaultTime),
+          category: r.company || r.stage || 'Funding',
+          amount: amountVal,
+          lead: r.lead_investors || '',
+          other_investors: r.other_investors || '',
+          source_link: r.source_link || ''
+        };
+      });
+    }
+  }
+
+  // 2. Legacy / latest_change_set fallback:
+  if (raw.latest_change_set) {
+    const items = [];
+    const lcs = raw.latest_change_set;
     if (Array.isArray(lcs.new)) {
       for (const entry of lcs.new) {
         const r = entry.record || entry;
         const parsed = normalizeRecord(r, defaultTime);
-        if (Array.isArray(parsed)) {
-          items.push(...parsed);
-        } else if (parsed) {
-          items.push(parsed);
-        }
+        if (Array.isArray(parsed)) items.push(...parsed);
+        else if (parsed) items.push(parsed);
       }
     }
-
-    // Check changed / updated items in change set
-    if (Array.isArray(lcs.changed)) {
-      for (const entry of lcs.changed) {
-        const r = entry.after || entry.record || entry;
-        const parsed = normalizeRecord(r, defaultTime);
-        if (parsed && !Array.isArray(parsed)) {
-          parsed.isUpdated = true;
-          items.push(parsed);
-        }
-      }
-    }
+    if (items.length > 0) return items;
   }
 
-  // 2. Direct items array fallback
-  if (items.length === 0 && Array.isArray(data.items)) {
-    return data.items.map(it => ({
+  // 3. Fallback to items array
+  if (Array.isArray(raw.items)) {
+    return raw.items.map(it => ({
       title: it.title || 'Market intelligence update',
       timestamp: formatShortTime(it.timestamp || it.date, defaultTime),
       category: it.category || it.stage || 'Round',
@@ -167,47 +226,7 @@ function extractSignals(payload) {
     }));
   }
 
-  // 2b. Agent 04 VC leader schema: data.data[] with { name, period, activity_summary }
-  const rawLeaders = (data.data && Array.isArray(data.data.data)) ? data.data.data : (Array.isArray(data.data) && data.data[0]?.name) ? data.data : null;
-  if (items.length === 0 && rawLeaders) {
-    const active = [];
-    const inactive = [];
-
-    for (const l of rawLeaders) {
-      if (!l.name || !l.activity_summary) continue;
-      const isNoActivity = l.activity_summary.toLowerCase().startsWith('no significant activity');
-      const item = {
-        title: l.activity_summary,
-        timestamp: l.period ? l.period.split(',')[0] : defaultTime,
-        category: l.name,
-        amount: '',
-        lead: l.activity_summary,
-        source_link: ''
-      };
-      if (isNoActivity) {
-        inactive.push(item);
-      } else {
-        active.push(item);
-      }
-    }
-    items.push(...active, ...inactive);
-  }
-
-  // 3. Narrative highlights fallback
-  if (items.length === 0 && data.narrative?.highlights) {
-    for (const h of data.narrative.highlights) {
-      items.push({
-        title: h,
-        timestamp: defaultTime,
-        category: 'Highlight',
-        amount: '',
-        lead: '',
-        source_link: ''
-      });
-    }
-  }
-
-  return items;
+  return [];
 }
 
 /**
