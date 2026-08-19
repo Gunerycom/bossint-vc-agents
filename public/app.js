@@ -137,13 +137,15 @@ function extractSignals(payload) {
       for (const l of lines) {
         const clean = l.replace(/^[-*•]\s*/, '').replace(/\*\*/g, '').trim();
         if (!clean || clean.startsWith('#') || !clean.includes(':')) continue;
-        const [header, ...rest] = clean.split(':');
-        const body = rest.join(':').trim();
+        const idx = clean.indexOf(':');
+        const header = clean.substring(0, idx).trim();
+        const body = clean.substring(idx + 1).trim();
+        const amountVal = formatAmount(body);
         parsedList.push({
-          title: header.trim(),
-          timestamp: 'Weekly',
-          category: 'MENA Round',
-          amount: '',
+          title: `${header}: ${body}`,
+          timestamp: 'Aug 10-17',
+          category: header,
+          amount: amountVal,
           lead: body,
           source_link: ''
         });
@@ -152,8 +154,8 @@ function extractSignals(payload) {
       if (reportObj.headline || reportObj.summary) {
         return [{
           title: reportObj.headline || 'MENA Venture Capital Weekly Briefing',
-          timestamp: 'Weekly',
-          category: 'Briefing',
+          timestamp: 'Aug 10-17',
+          category: 'MENA Radar',
           amount: '',
           lead: reportObj.summary || '',
           source_link: ''

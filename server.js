@@ -212,17 +212,20 @@ function normalizeHarnessedAgentData(raw) {
       const lines = text.split('\n');
       for (const l of lines) {
         const clean = l.replace(/^[-*•]\s*/, '').replace(/\*\*/g, '').trim();
-        if (clean && clean.includes(':') && !clean.startsWith('#')) {
-          const parts = clean.split(':');
-          deals.push({
-            title: parts[0].trim(),
-            category: 'MENA Deal',
-            amount: '',
-            timestamp: 'This Week',
-            lead: parts.slice(1).join(':').trim(),
-            source_link: ''
-          });
-        }
+        if (!clean || clean.startsWith('#') || !clean.includes(':')) continue;
+        const idx = clean.indexOf(':');
+        const header = clean.substring(0, idx).trim();
+        const body = clean.substring(idx + 1).trim();
+        const amountMatch = body.match(/\$[\d,.]+[MBK]?|\d+[MBK]?\s*(?:million|billion)/i);
+        const amountVal = amountMatch ? amountMatch[0] : '';
+        deals.push({
+          title: `${header}: ${body}`,
+          category: header,
+          amount: amountVal,
+          timestamp: 'Aug 10-17',
+          lead: body,
+          source_link: ''
+        });
       }
     }
     const res = deals;
