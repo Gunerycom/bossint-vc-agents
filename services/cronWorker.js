@@ -67,81 +67,73 @@ function writeState(state) {
 }
 
 /**
- * Normalizes and extracts deals from an agent API payload
+ * Normalizes and extracts deals and reports from an agent API payload (/latest schema)
  */
 function extractDealsFromPayload(data) {
   if (!data) return [];
-  const deals = [];
+  const dataWrapper = data.data || data;
+  const items = Array.isArray(dataWrapper.data) ? dataWrapper.data : (Array.isArray(dataWrapper) ? dataWrapper : []);
 
-  // Check latest change set
-  if (data.latest_change_set) {
-    const lcs = data.latest_change_set;
-    if (Array.isArray(lcs.new)) {
-      for (const entry of lcs.new) {
-        const r = entry.record || entry;
-        if (r.company) {
+  // Structured report
+  if (items.length > 0 && (items[0].summary || items[0].key_findings || items[0].weekly_highlights)) {
+    const reportObj = items[0];
+    const deals = [];
+    if (reportObj.notable_deals || reportObj.weekly_highlights) {
+      const text = reportObj.notable_deals || reportObj.weekly_highlights;
+      const lines = text.split('\n');
+      for (const l of lines) {
+        const clean = l.replace(/^[-*•]\s*/, '').replace(/\*\*/g, '').trim();
+        if (clean && clean.includes(':') && !clean.startsWith('#')) {
+          const parts = clean.split(':');
           deals.push({
-            title: `${r.company} raises ${r.investment_value || ''} ${r.stage || ''}`.trim(),
-            category: r.stage || 'Funding',
-            amount: r.investment_value || '',
-            timestamp: r.date || 'Today',
-            lead: r.lead_investors || '',
-            source_link: r.source_link || ''
+            title: parts[0].trim(),
+            category: 'MENA Deal',
+            amount: '',
+            timestamp: 'This Week',
+            lead: parts.slice(1).join(':').trim(),
+            source_link: ''
           });
-        } else if (r.notable_deals || r.weekly_highlights) {
-          const lines = (r.notable_deals || r.weekly_highlights).split('\n');
-          for (const l of lines) {
-            const clean = l.replace(/^[-*•]\s*/, '').replace(/\*\*/g, '').trim();
-            if (clean && clean.includes(':') && !clean.startsWith('#')) {
-              const parts = clean.split(':');
-              deals.push({
-                title: parts[0].trim(),
-                category: 'MENA Deal',
-                amount: '',
-                timestamp: 'Weekly',
-                lead: parts.slice(1).join(':').trim(),
-                source_link: ''
-              });
-            }
-          }
         }
       }
     }
+    return deals;
   }
 
-  // Check for Agent 04 VC leader schema: data.data[] with { name, period, activity_summary }
-  const rawLeaders = (data.data && Array.isArray(data.data.data)) ? data.data.data : (Array.isArray(data.data) && data.data[0]?.name) ? data.data : null;
-  if (rawLeaders) {
+  // VC Leaders
+  if (items.length > 0 && items[0].name && items[0].activity_summary) {
     const active = [];
     const inactive = [];
-
-    for (const l of rawLeaders) {
-      if (!l.name || !l.activity_summary) continue;
-      const isNoActivity = l.activity_summary.toLowerCase().startsWith('no significant activity');
+    for (const l of items) {
+      if (!l.name) continue;
+      const isNoActivity = (l.activity_summary || '').toLowerCase().startsWith('no significant activity');
       const item = {
         title: l.activity_summary,
-        timestamp: l.period ? l.period.split(',')[0] : 'This Week',
+        timestamp: l.period || 'This Week',
         category: l.name,
         amount: '',
         lead: l.activity_summary,
         source_link: ''
       };
-      if (isNoActivity) {
-        inactive.push(item);
-      } else {
-        active.push(item);
-      }
+      if (isNoActivity) inactive.push(item);
+      else active.push(item);
     }
-    const combined = [...active, ...inactive];
-    if (combined.length > 0) return combined;
+    return [...active, ...inactive];
   }
 
-  // Fallback to items array
-  if (deals.length === 0 && Array.isArray(data.items)) {
-    return data.items;
+  // Funding rounds / AI deals
+  if (items.length > 0 && (items[0].company || items[0].investment_value)) {
+    return items.map(d => ({
+      title: d.company ? (d.investment_value ? `${d.company} — ${d.investment_value}` : d.company) : (d.title || 'Deal'),
+      category: d.company || 'AI Deal',
+      amount: d.investment_value || '',
+      timestamp: d.date || 'Recent',
+      lead: d.lead_investors || '',
+      other_investors: d.other_investors || '',
+      source_link: d.source_link || ''
+    }));
   }
 
-  return deals;
+  return items;
 }
 
 /**
@@ -149,21 +141,10 @@ function extractDealsFromPayload(data) {
  */
 function extractReportFromPayload(data) {
   if (!data) return null;
-  const lcs = data.latest_change_set;
-  if (lcs && Array.isArray(lcs.new) && lcs.new.length > 0) {
-    const r = lcs.new[0].record || lcs.new[0];
-    if (r.summary || r.key_findings || r.regional_breakdown || r.funding_trends || r.outlook) {
-      return {
-        headline: r.headline || '',
-        summary: r.summary || '',
-        key_findings: r.key_findings || '',
-        weekly_highlights: r.weekly_highlights || '',
-        regional_breakdown: r.regional_breakdown || '',
-        notable_deals: r.notable_deals || '',
-        funding_trends: r.funding_trends || '',
-        outlook: r.outlook || ''
-      };
-    }
+  const dataWrapper = data.data || data;
+  const items = Array.isArray(dataWrapper.data) ? dataWrapper.data : (Array.isArray(dataWrapper) ? dataWrapper : []);
+  if (items.length > 0 && (items[0].summary || items[0].key_findings || items[0].weekly_highlights)) {
+    return items[0];
   }
   return null;
 }
@@ -175,10 +156,7 @@ function extractReportFromPayload(data) {
  * @returns {Promise<Object>}
  */
 async function checkAgentUpdates(agent, forceDispatch = false) {
-  const isAgent04 = agent.id === AGENT_04_ID;
-  const url = isAgent04
-    ? `${BOSSINT_API_HOST}/api/agents/${agent.id}/latest`
-    : `${BOSSINT_API_HOST}/api/agents/${agent.id}`;
+  const url = `${BOSSINT_API_HOST}/api/agents/${agent.id}/latest`;
   const headers = { 'Accept': 'application/json', 'User-Agent': 'Bossint-Cron/1.0' };
   if (BOSSINT_API_KEY) {
     headers['Authorization'] = `Bearer ${BOSSINT_API_KEY}`;
@@ -194,7 +172,7 @@ async function checkAgentUpdates(agent, forceDispatch = false) {
     const currentState = readState();
     const prevState = currentState[agent.id] || null;
 
-    const currentRunAt = json.last_run_at || json.created_at || 'unknown';
+    const currentRunAt = json.data?.generated_at || json.last_run_at || 'unknown';
     const deals = extractDealsFromPayload(json);
     const report = extractReportFromPayload(json);
     const fingerprint = `${currentRunAt}_deals_${deals.length}_${deals[0]?.title || ''}`;

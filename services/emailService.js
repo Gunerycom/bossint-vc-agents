@@ -41,14 +41,22 @@ async function sendWelcomeEmail(toEmail, agentName = 'VC & Investors Intel Agent
   const from = getFromAddress();
   const unsubscribeUrl = buildUnsubscribeUrl(token);
 
+  const dealsList = Array.isArray(deals) ? deals : (deals?.deals || []);
+  const report = deals?.report || null;
+  const narrative = deals?.narrative || null;
+  const metadata = deals?.metadata || null;
+
   const html = emailTemplates.renderWelcomeEmail({
     agentName,
-    deals,
+    deals: dealsList,
+    report,
+    narrative,
+    metadata,
     unsubscribeUrl
   });
 
   if (!resend) {
-    console.log(`[EmailService - DRY RUN] (No RESEND_API_KEY set) Would send Welcome Email to: ${toEmail} for agent: "${agentName}" with ${deals.length} deals.`);
+    console.log(`[EmailService - DRY RUN] (No RESEND_API_KEY set) Would send Welcome Email to: ${toEmail} for agent: "${agentName}" with ${dealsList.length} deals.`);
     return { success: true, simulated: true, to: toEmail };
   }
 
@@ -77,7 +85,7 @@ async function sendWelcomeEmail(toEmail, agentName = 'VC & Investors Intel Agent
 /**
  * Sends a Full Stack Welcome Email when subscribing to all 4 feeds
  * @param {string} toEmail 
- * @param {Array} sampleDeals 
+ * @param {Array|Object} sampleDeals 
  * @param {string} token 
  * @returns {Promise<Object>}
  */
@@ -86,8 +94,12 @@ async function sendFullStackWelcomeEmail(toEmail, sampleDeals = [], token = '') 
   const from = getFromAddress();
   const unsubscribeUrl = buildUnsubscribeUrl(token);
 
+  const dealsList = Array.isArray(sampleDeals) ? sampleDeals : (sampleDeals?.deals || []);
+  const agentStacks = sampleDeals?.agentStacks || null;
+
   const html = emailTemplates.renderFullStackWelcomeEmail({
-    sampleDeals,
+    sampleDeals: dealsList,
+    agentStacks,
     unsubscribeUrl
   });
 

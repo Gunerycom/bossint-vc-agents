@@ -187,45 +187,100 @@ if (AGENT_04_ID) {
 }
 
 /**
- * Builds the correct Bossint API URL for an agent
- * Agent 04 uses the /latest endpoint suffix
+ * Builds the correct Bossint API URL for an agent.
+ * All agents use the /latest endpoint suffix to retrieve full harvested data.
  */
 function buildAgentApiUrl(agentId) {
-  const isAgent04 = agentId === AGENT_04_ID;
-  return isAgent04
-    ? `${BOSSINT_API_HOST}/api/agents/${agentId}/latest`
-    : `${BOSSINT_API_HOST}/api/agents/${agentId}`;
+  return `${BOSSINT_API_HOST}/api/agents/${agentId}/latest`;
 }
 
 /**
- * Normalizes Agent 04 VC leader data into the standard feed item format
+ * Normalizes live harvested API payload from /latest endpoint into structured feed items & reports
  */
-function normalizeVcLeaderData(payload) {
-  const leaders = payload?.data?.data || payload?.data || [];
-  if (!Array.isArray(leaders)) return [];
+function normalizeHarnessedAgentData(raw) {
+  if (!raw) return { deals: [], report: null, metadata: null };
+  const dataWrapper = raw.data || raw;
+  const items = Array.isArray(dataWrapper.data) ? dataWrapper.data : (Array.isArray(dataWrapper) ? dataWrapper : []);
+  const metadata = dataWrapper.metadata || raw.metadata || null;
 
-  const active = [];
-  const inactive = [];
-
-  for (const l of leaders) {
-    if (!l.name || !l.activity_summary) continue;
-    const isNoActivity = l.activity_summary.toLowerCase().startsWith('no significant activity');
-    const item = {
-      title: l.activity_summary,
-      timestamp: l.period || 'This Week',
-      category: l.name,
-      amount: '',
-      lead: l.activity_summary,
-      source_link: ''
-    };
-    if (isNoActivity) {
-      inactive.push(item);
-    } else {
-      active.push(item);
+  // Case 1: Structured Multi-Section Report (e.g. MENA Investment Radar)
+  if (items.length > 0 && (items[0].summary || items[0].key_findings || items[0].weekly_highlights)) {
+    const reportObj = items[0];
+    const deals = [];
+    if (reportObj.notable_deals || reportObj.weekly_highlights) {
+      const text = reportObj.notable_deals || reportObj.weekly_highlights;
+      const lines = text.split('\n');
+      for (const l of lines) {
+        const clean = l.replace(/^[-*•]\s*/, '').replace(/\*\*/g, '').trim();
+        if (clean && clean.includes(':') && !clean.startsWith('#')) {
+          const parts = clean.split(':');
+          deals.push({
+            title: parts[0].trim(),
+            category: 'MENA Deal',
+            amount: '',
+            timestamp: 'This Week',
+            lead: parts.slice(1).join(':').trim(),
+            source_link: ''
+          });
+        }
+      }
     }
+    const res = deals;
+    res.deals = deals;
+    res.report = reportObj;
+    res.metadata = metadata;
+    res.narrative = reportObj.summary ? { headline: reportObj.headline, summary: reportObj.summary } : null;
+    return res;
   }
 
-  return [...active, ...inactive];
+  // Case 2: Top 10 VC Leaders (Agent 04)
+  if (items.length > 0 && items[0].name && items[0].activity_summary) {
+    const active = [];
+    const inactive = [];
+    for (const l of items) {
+      if (!l.name) continue;
+      const isNoActivity = (l.activity_summary || '').toLowerCase().startsWith('no significant activity');
+      const item = {
+        title: l.activity_summary,
+        timestamp: l.period || 'This Week',
+        category: l.name,
+        amount: '',
+        lead: l.activity_summary,
+        source_link: ''
+      };
+      if (isNoActivity) inactive.push(item);
+      else active.push(item);
+    }
+    const res = [...active, ...inactive];
+    res.deals = res;
+    res.report = null;
+    res.metadata = metadata;
+    return res;
+  }
+
+  // Case 3: Funding Rounds / AI Deals (Agent 1 & Agent 2)
+  if (items.length > 0 && (items[0].company || items[0].investment_value)) {
+    const deals = items.map(d => ({
+      title: d.company ? (d.investment_value ? `${d.company} — ${d.investment_value}` : d.company) : (d.title || 'Deal'),
+      category: d.company || 'AI Deal',
+      amount: d.investment_value || '',
+      timestamp: d.date || 'Recent',
+      lead: d.lead_investors || '',
+      other_investors: d.other_investors || '',
+      source_link: d.source_link || ''
+    }));
+    const res = deals;
+    res.deals = deals;
+    res.report = null;
+    res.metadata = metadata;
+    return res;
+  }
+
+  const res = items;
+  res.deals = items;
+  res.report = null;
+  res.metadata = metadata;
+  return res;
 }
 
 /**
@@ -250,7 +305,8 @@ async function getDealsForAgent(agentId) {
         agentName: ag.name,
         deals,
         report: payload?.report || null,
-        narrative: payload?.narrative || null
+        narrative: payload?.narrative || null,
+        metadata: payload?.metadata || null
       });
       if (deals.length > 0) sampleDeals.push(...deals);
     }
@@ -260,8 +316,6 @@ async function getDealsForAgent(agentId) {
     return res;
   }
 
-  const isAgent04 = agentId === AGENT_04_ID;
-
   try {
     const url = buildAgentApiUrl(agentId);
     const headers = { 'Accept': 'application/json', 'User-Agent': 'Bossint-Server/1.0' };
@@ -270,21 +324,10 @@ async function getDealsForAgent(agentId) {
     const response = await fetch(url, { headers, signal: AbortSignal.timeout(8000) });
     if (response.ok) {
       const data = await response.json();
-      // Agent 04 has a different schema: data.data[] with { name, period, activity_summary }
-      if (isAgent04) {
-        const leaders = normalizeVcLeaderData(data);
-        leaders.metadata = data?.data?.metadata || data?.metadata || null;
-        return leaders;
-      } else {
-        const extracted = cronWorker.extractDealsFromPayload(data);
-        const report = cronWorker.extractReportFromPayload(data);
-        extracted.report = report;
-        extracted.narrative = data?.data?.narrative || data?.narrative || null;
-        return extracted;
-      }
+      return normalizeHarnessedAgentData(data);
     }
   } catch (err) {
-    // Fall back to local fallback data
+    console.error(`[API] Error fetching live data for ${agentId}:`, err.message);
   }
 
   const fallback = FALLBACK_SIGNALS[agentId] || VC_LEADERS_FALLBACK;
