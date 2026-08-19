@@ -360,12 +360,17 @@ function renderErrorState(container) {
 }
 
 /**
- * Local verification state helpers
+ * Local verification state helpers with cross-tab and cookie synchronization
  */
 function isEmailLocallyVerified(email) {
   if (!email) return false;
+  const clean = email.trim().toLowerCase();
   try {
-    return localStorage.getItem('bossint_verified_' + email.trim().toLowerCase()) === 'true';
+    const isVerified = localStorage.getItem('bossint_verified_' + clean) === 'true';
+    const lastEmail = localStorage.getItem('bossint_last_verified_email') === clean;
+    const cookieMatch = document.cookie.includes('bossint_verified_email=' + encodeURIComponent(clean)) ||
+                        document.cookie.includes('bossint_verified_email=' + clean);
+    return Boolean(isVerified || lastEmail || cookieMatch);
   } catch (e) {
     return false;
   }
@@ -373,11 +378,30 @@ function isEmailLocallyVerified(email) {
 
 function markEmailLocallyVerified(email) {
   if (!email) return;
+  const clean = email.trim().toLowerCase();
   try {
-    localStorage.setItem('bossint_verified_' + email.trim().toLowerCase(), 'true');
-    localStorage.setItem('bossint_last_verified_email', email.trim().toLowerCase());
+    localStorage.setItem('bossint_verified_' + clean, 'true');
+    localStorage.setItem('bossint_last_verified_email', clean);
+    document.cookie = "bossint_verified_email=" + encodeURIComponent(clean) + "; path=/; max-age=31536000; SameSite=Lax";
   } catch (e) {}
 }
+
+function syncVerifiedState() {
+  try {
+    const match = document.cookie.match(/bossint_verified_email=([^;]+)/);
+    if (match && match[1]) {
+      const email = decodeURIComponent(match[1]).trim().toLowerCase();
+      if (email) {
+        localStorage.setItem('bossint_verified_' + email, 'true');
+        localStorage.setItem('bossint_last_verified_email', email);
+      }
+    }
+  } catch (e) {}
+}
+
+window.addEventListener('focus', syncVerifiedState);
+window.addEventListener('storage', syncVerifiedState);
+syncVerifiedState();
 
 /**
  * Initializes email subscribe forms with client validation and inline success flow

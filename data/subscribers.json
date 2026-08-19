@@ -252,5 +252,21 @@
     "lastConfirmedAt": "2026-08-19T02:25:28.257Z",
     "lastEmailedAt": "2026-08-19T02:25:33.307Z",
     "emailsSentCount": 2
+  },
+  {
+    "id": "sub_1787108990111_cloon1",
+    "email": "cloonedcom@gmail.com",
+    "agentId": "167023b0-3a2c-44b5-9c16-39788d6cd4b7",
+    "agentName": "Full VC Intelligence Stack",
+    "status": "active",
+    "verified": true,
+    "frequency": "all",
+    "verifyToken": "cloon_token_verified_167023",
+    "unsubscribeToken": "cloon_unsub_token_167023",
+    "subscribedAt": "2026-08-19T02:30:00.000Z",
+    "verifiedAt": "2026-08-19T02:30:00.000Z",
+    "lastConfirmedAt": "2026-08-19T02:42:36.778Z",
+    "lastEmailedAt": "2026-08-19T02:42:39.688Z",
+    "emailsSentCount": 2
   }
 ]

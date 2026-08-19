@@ -358,12 +358,17 @@ app.post('/api/subscribe', async (req, res) => {
     });
   }
 
+  const normalizedEmail = email.trim().toLowerCase();
+  const cookieHeader = req.headers.cookie || '';
+  const hasVerifiedCookie = cookieHeader.includes(`bossint_verified_email=${encodeURIComponent(normalizedEmail)}`) || cookieHeader.includes(`bossint_verified_email=${normalizedEmail}`);
+  const clientAlreadyVerified = Boolean(isClientVerified) || hasVerifiedCookie;
+
   const isAll = agentId === 'all' || agentId === 'full-stack';
   const targetAgentId = isAll ? 'all' : agentId;
   const agentName = isAll ? 'Full VC Intelligence Stack' : (AGENT_NAMES[agentId] || 'VC & Investors Intel Agents');
 
   // Persist subscriber to disk
-  const subResult = subscriberStore.addSubscriber(email, targetAgentId, agentName, frequency, isClientVerified);
+  const subResult = subscriberStore.addSubscriber(email, targetAgentId, agentName, frequency, clientAlreadyVerified);
   const token = subResult.subscriber?.unsubscribeToken || '';
   const verifyToken = subResult.verifyToken || subResult.subscriber?.verifyToken || '';
 
@@ -383,9 +388,11 @@ app.post('/api/subscribe', async (req, res) => {
       console.error(`[SUBSCRIBE] Error dispatching briefing to ${email}:`, err.message);
     }
 
+    res.setHeader('Set-Cookie', `bossint_verified_email=${encodeURIComponent(normalizedEmail)}; Path=/; Max-Age=31536000; SameSite=Lax`);
+
     return res.json({
       success: true,
-      message: "Subscription active — intelligence briefing dispatched",
+      message: "Subscription active — intelligence briefing dispatched to your inbox",
       isNew: subResult.isNew,
       requiresVerification: false,
       email,
@@ -448,9 +455,10 @@ app.get('/verify', async (req, res) => {
   const html = emailTemplates.renderVerificationConfirmationHtml({
     email,
     agentName,
-    dashboardUrl: '/'
+    dashboardUrl: '/vc'
   });
 
+  res.setHeader('Set-Cookie', `bossint_verified_email=${encodeURIComponent(email.trim().toLowerCase())}; Path=/; Max-Age=31536000; SameSite=Lax`);
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.send(html);
 });

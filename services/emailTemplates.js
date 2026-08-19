@@ -15,8 +15,6 @@ function escapeHtml(text) {
     .replace(/'/g, '&#039;');
 }
 
-const LOGO_SVG_BASE64 = `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMTAxLjkyIDE2Ny44MyIgd2lkdGg9IjEzMCIgaGVpZ2h0PSIyMCI+PGc+PHBhdGggZmlsbD0iIzFFNEVEOCIgZD0ibTMzOS4zOCwxMDguNDVjMCwzNS4zOC0yNC41LDU4LTU2LjExLDU4LTE1LjA3LDAtMjcuMjItNC44Mi0zNS4zOC0xNC42NnYxMi45OGgtMzEuMlY5LjQyaDMyLjY2djU0LjY0YzguMzctOS4yMSwxOS44OS0xMy42MSwzMy45Mi0xMy42MSwzMS42MiwwLDU2LjExLDIyLjYxLDU2LjExLDU4Wm0tMzMuMDgsMGMwLTE5LjQ3LTEyLjM1LTMxLjItMjguNjgtMzEuMnMtMjguNjgsMTEuNzItMjguNjgsMzEuMiwxMi4zNSwzMS4yLDI4LjY4LDMxLjIsMjguNjgtMTEuNzIsMjguNjgtMzEuMloiPjwvcGF0aD48cGF0aCBmaWxsPSIjMUU0RUQ4IiBkPSJtMzM2LjAzLDEwOC40NWMwLTMzLjkyLDI2LjE3LTU4LDYxLjk3LTU4czYxLjc2LDI0LjA4LDYxLjc2LDU4LTI1Ljk2LDU4LTYxLjc2LDU4LTYxLjk3LTI0LjA4LTYxLjk3LTU4Wm05MC42NiwwYzAtMTkuNDctMTIuMzUtMzEuMi0yOC42OC0zMS4ycy0yOC44OSwxMS43Mi0yOC44OSwzMS4yLDEyLjU2LDMxLjIsMjguODksMzEuMiwyOC42OC0xMS43MiwyOC42OC0zMS4yWiI+PC9wYXRoPjxwYXRoIGZpbGw9IiMxRTRFRDgiIGQ9Im00NTMuOTEsMTU0LjMxbDEwLjg5LTIzLjQ1YzEwLjA1LDYuNDksMjUuMzMsMTAuODksMzkuMTUsMTAuODksMTUuMDcsMCwyMC43My0zLjk4LDIwLjczLTEwLjI2LDAtMTguNDMtNjguMDQuNDItNjguMDQtNDQuNiwwLTIxLjM2LDE5LjI2LTM2LjQzLDUyLjEzLTM2LjQzLDE1LjQ5LDAsMzIuNjYsMy41Niw0My4zNCw5Ljg0bC0xMC44OSwyMy4yNGMtMTEuMS02LjI4LTIyLjE5LTguMzctMzIuNDUtOC4zNy0xNC42NiwwLTIwLjk0LDQuNjEtMjAuOTQsMTAuNDcsMCwxOS4yNiw2OC4wNC42Myw2OC4wNCw0NS4wMSwwLDIwLjk0LTE5LjQ3LDM1LjgtNTMuMTgsMzUuOC0xOS4wNSwwLTM4LjMxLTUuMjMtNDguNzgtMTIuMTRaIj48L3BhdGg+PHBhdGggZmlsbD0iIzFFNEVEOCIgZD0ibTU0OC4zNCwxNTQuMzFsMTAuODktMjMuNDVjMTAuMDUsNi40OSwyNS4zMywxMC44OSwzOS4xNSwxMC44OSwxNS4wNywwLDIwLjczLTMuOTgsMjAuNzMtMTAuMjYsMC0xOC40My02OC4wNC40Mi02OC4wNC00NC42LDAtMjEuMzYsMTkuMjYtMzYuNDMsNTIuMTMtMzYuNDMsMTUuNDksMCwzMi42NiwzLjU2LDQzLjM0LDkuODRsLTEwLjg5LDIzLjI0Yy0xMS4xLTYuMjgtMjIuMTktOC4zNy0zMi40NS04LjM3LTE0LjY2LDAtMjAuOTQsNC42MS0yMC45NCwxMC40NywwLDE5LjI2LDY4LjA0LjYzLDY4LjA0LDQ1LjAxLDAsMjAuOTQtMTkuNDcsMzUuOC01My4xOCwzNS44LTE5LjA1LDAtMzguMzEtNS4yMy00OC43OC0xMi4xNFoiPjwvcGF0aD48cGF0aCBmaWxsPSIjMUU0RUQ4IiBkPSJtNjQ5LjY3LDE4LjIyYzAtMTAuMjYsOC4xNy0xOC4yMiwyMC4zMS0xOC4yMnMyMC4zMSw3LjU0LDIwLjMxLDE3LjU5YzAsMTAuODktOC4xNywxOC44NC0yMC4zMSwxOC44NHMtMjAuMzEtNy45Ni0yMC4zMS0xOC4yMVptMy45OCwzMy45MmgzMi42NnYxMTIuNjRoLTMyLjY2VjUyLjEzWiI+PC9wYXRoPjxwYXRoIGZpbGw9IiMxRTRFRDgiIGQ9Im04MTUuMDgsMTAwLjI5djY0LjQ5aC0zMi42NnYtNTkuNDZjMC0xOC4yMi04LjM3LTI2LjU5LTIyLjgyLTI2LjU5LTE1LjcsMC0yNy4wMSw5LjYzLTI3LjAxLDMwLjM2djU1LjY5aC0zMi42NlY1Mi4xM2gzMS4ydjEzLjE5YzguNzktOS42MywyMS45OC0xNC44NywzNy4yNy0xNC44NywyNi41OSwwLDQ2LjY5LDE1LjQ5LDQ2LjY5LDQ5LjgzWiI+PC9wYXRoPjxwYXRoIGZpbGw9IiMxRTRFRDgiIGQ9Im05MDAuNSwxNTkuMzNjLTYuNyw0LjgyLTE2LjU0LDcuMTItMjYuNTksNy4xMi0yNi41OSwwLTQyLjA4LTEzLjYxLTQyLjA4LTQwLjQxdi00Ni4yN2gtMTcuMzh2LTI1LjEyaDE3LjM4di0yNy40M2gzMi42NnYyNy40M2gyOC4wNnYyNS4xMmgtMjguMDZ2NDUuODVjMCw5LjYzLDUuMjMsMTQuODcsMTQuMDMsMTQuODcsNC44MiwwLDkuNjMtMS40NywxMy4xOS00LjE5bDguNzksMjMuMDNaIj48L3BhdGg+PHBhdGggZmlsbD0iIzFFNEVEOCIgZD0ibTkwNC42OSwxNDUuOTNjMC0xMi4xNCw5LTIwLjEsMjAuMzEtMjAuMXMyMC4zMSw3Ljk2LDIwLjMxLDIwLjEtOSwyMC41Mi0yMC4zMSwyMC41Mi0yMC4zMS04LjU4LTIwLjMxLTIwLjUyWiI+PC9wYXRoPjxwYXRoIGZpbGw9IiMxRTRFRDgiIGQ9Im0xMDUyLjUxLDEwMC41djY0LjI4aC0zMC41N3YtMTQuMDNjLTYuMDcsMTAuMjYtMTcuOCwxNS43LTM0LjM0LDE1LjctMjYuMzgsMC00Mi4wOC0xNC42Ni00Mi4wOC0zNC4xM3MxNC4wMy0zMy43MSw0OC4zNi0zMy43MWgyNS45NmMwLTE0LjAzLTguMzgtMjIuMTktMjUuOTYtMjIuMTktMTEuOTMsMC0yNC4yOSwzLjk4LTMyLjQ1LDEwLjQ3bC0xMS43Mi0yMi44MmMxMi4zNS04Ljc5LDMwLjU3LTEzLjYxLDQ4LjU3LTEzLjYxLDM0LjM0LDAsNTQuMjMsMTUuOTEsNTQuMjMsNTAuMDRabS0zMi42NiwyOC42OHYtMTEuNTJoLTIyLjRjLTE1LjI4LDAtMjAuMSw1LjY1LTIwLjEsMTMuMTksMCw4LjE3LDYuOTEsMTMuNjEsMTguNDMsMTMuNjEsMTAuODksMCwyMC4zMS01LjAyLDI0LjA4LTE1LjI4WiI+PC9wYXRoPjxwYXRoIGZpbGw9IiMxRTRFRDgiIGQ9Im0xMDYxLjMsMTguMjJjMC0xMC4yNiw4LjE2LTE4LjIyLDIwLjMxLTE4LjIyczIwLjMxLDcuNTQsMjAuMzEsMTcuNTljMCwxMC44OS04LjE2LDE4Ljg0LTIwLjMxLDE4Ljg0cy0yMC4zMS03Ljk2LTIwLjMxLTE4LjIxWm0zLjk4LDMzLjkyaDMyLjY2djExMi42NGgtMzIuNjZWNTIuMTNaIj48L3BhdGg+PC9nPjxnPjxyZWN0IGZpbGw9IiNGNTlFMEIiIHk9IjguMTQiIHdpZHRoPSI0NS42MiIgaGVpZ2h0PSI0NS42MiI+PC9yZWN0PjxyZWN0IGZpbGw9IiM5M0M1RkQiIHg9IjU3LjAzIiB5PSI4LjE0IiB3aWR0aD0iNDUuNjIiIGhlaWdodD0iNDUuNjIiPjwvcmVjdD48cmVjdCBmaWxsPSIjOTNDNUZEIiB5PSI2NS4xNyIgd2lkdGg9IjQ1LjYyIiBoZWlnaHQ9IjQ1LjYyIj48L3JlY3Q+PGc+PHJlY3QgZmlsbD0iIzFFNEVEOCIgeD0iMTE0LjQ0IiB5PSI5LjQ4IiB3aWR0aD0iNDUuMjQiIGhlaWdodD0iNDUuMjQiPjwvcmVjdD48cmVjdCBmaWxsPSIjMUU0RUQ4IiB4PSI1Ny44OSIgeT0iNjYuMDMiIHdpZHRoPSI0NS4yNCIgaGVpZ2h0PSI0NS4yNCI+PC9yZWN0PjxyZWN0IGZpbGw9IiMxRTRFRDgiIHg9IjExNC40NCIgeT0iNjYuMDMiIHdpZHRoPSI0NS4yNCIgaGVpZ2h0PSI0NS4yNCI+PC9yZWN0PjxyZWN0IGZpbGw9IiMxRTRFRDgiIHg9IjEuMzQiIHk9IjEyMi41OSIgd2lkdGg9IjQ1LjI0IiBoZWlnaHQ9IjQ1LjI0Ij48L3JlY3Q+PHJlY3QgZmlsbD0iIzFFNEVEOCIgeD0iNTcuODkiIHk9IjEyMi41OSIgd2lkdGg9IjQ1LjI0IiBoZWlnaHQ9IjQ1LjI0Ij48L3JlY3Q+PHJlY3QgZmlsbD0iIzFFNEVEOCIgeD0iMTE0LjQ0IiB5PSIxMjIuNTkiIHdpZHRoPSI0NS4yNCIgaGVpZ2h0PSI0NS4yNCI+PC9yZWN0PjwvZz48L2c+PC9zdmc+`;
-
 function getEmailHeader(pillText = 'INTELLIGENCE DISPATCH', pillColor = '#1E4ED8', pillBg = '#EFF6FF', pillBorder = '#DBEAFE') {
   return `
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #FFFFFF; border-bottom: 1px solid #E5E1D6;">
@@ -25,8 +23,33 @@ function getEmailHeader(pillText = 'INTELLIGENCE DISPATCH', pillColor = '#1E4ED8
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td valign="middle" align="left">
-                <a href="https://bossint.ai" target="_blank" style="text-decoration: none; display: inline-block; vertical-align: middle;">
-                  <img src="${LOGO_SVG_BASE64}" alt="Bossint AI" width="130" height="20" style="display: block; width: 130px; height: auto; max-height: 22px; border: 0; outline: none; text-decoration: none;" />
+                <a href="https://agents.bossint.ai/vc" target="_blank" style="text-decoration: none; display: inline-block; vertical-align: middle;">
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="display: inline-table; vertical-align: middle;">
+                    <tr>
+                      <td valign="middle" style="padding-right: 8px;">
+                        <table role="presentation" cellpadding="0" cellspacing="1" border="0" style="width: 20px; height: 20px;">
+                          <tr>
+                            <td style="width: 5px; height: 5px; background-color: #F59E0B; font-size: 1px; line-height: 1px;">&nbsp;</td>
+                            <td style="width: 5px; height: 5px; background-color: #93C5FD; font-size: 1px; line-height: 1px;">&nbsp;</td>
+                            <td style="width: 5px; height: 5px; background-color: #1E4ED8; font-size: 1px; line-height: 1px;">&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td style="width: 5px; height: 5px; background-color: #93C5FD; font-size: 1px; line-height: 1px;">&nbsp;</td>
+                            <td style="width: 5px; height: 5px; background-color: #1E4ED8; font-size: 1px; line-height: 1px;">&nbsp;</td>
+                            <td style="width: 5px; height: 5px; background-color: #1E4ED8; font-size: 1px; line-height: 1px;">&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td style="width: 5px; height: 5px; background-color: #1E4ED8; font-size: 1px; line-height: 1px;">&nbsp;</td>
+                            <td style="width: 5px; height: 5px; background-color: #1E4ED8; font-size: 1px; line-height: 1px;">&nbsp;</td>
+                            <td style="width: 5px; height: 5px; background-color: #1E4ED8; font-size: 1px; line-height: 1px;">&nbsp;</td>
+                          </tr>
+                        </table>
+                      </td>
+                      <td valign="middle" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 19px; font-weight: 800; color: #1E4ED8; letter-spacing: -0.03em; line-height: 1; text-decoration: none;">
+                        bossint<span style="color: #1E4ED8;">.ai</span>
+                      </td>
+                    </tr>
+                  </table>
                 </a>
               </td>
               <td valign="middle" align="right">
@@ -743,8 +766,8 @@ function renderVerificationConfirmationHtml({ email, agentName, dashboardUrl = '
 <body>
   <div class="card">
     <div class="brand">
-      <a href="https://bossint.ai" target="_blank" style="text-decoration: none; display: inline-block;">
-        <img src="${LOGO_SVG_BASE64}" alt="Bossint AI" width="140" height="22" style="display: block; margin: 0 auto; border: 0;" />
+      <a href="/vc" style="text-decoration: none; display: inline-block;">
+        <img src="/BOSSINT-NEW-LOGO.svg" alt="Bossint AI" width="140" height="22" style="display: block; margin: 0 auto; border: 0;" onerror="this.src='/logo.svg'" />
       </a>
     </div>
     <div class="icon-box">
@@ -754,17 +777,19 @@ function renderVerificationConfirmationHtml({ email, agentName, dashboardUrl = '
     </div>
     <h1>Email Verified</h1>
     <p>
-      Your subscription to <strong>${escapeHtml(agentName)}</strong> is active. Your first intelligence briefing is on its way.
+      Your subscription to <strong>${escapeHtml(agentName)}</strong> is active. Your first intelligence briefing is on its way. Check your email!
     </p>
     <div class="email-chip">${escapeHtml(email)}</div>
     <div>
-      <a href="${escapeHtml(dashboardUrl)}" class="btn">View Live Feed &rarr;</a>
+      <a href="${escapeHtml(dashboardUrl || '/vc')}" class="btn">View VC Agents &rarr;</a>
     </div>
   </div>
   <script>
     try {
-      localStorage.setItem('bossint_verified_' + ${JSON.stringify(String(email).trim().toLowerCase())}, 'true');
-      localStorage.setItem('bossint_last_verified_email', ${JSON.stringify(String(email).trim().toLowerCase())});
+      const cleanEmail = ${JSON.stringify(String(email).trim().toLowerCase())};
+      localStorage.setItem('bossint_verified_' + cleanEmail, 'true');
+      localStorage.setItem('bossint_last_verified_email', cleanEmail);
+      document.cookie = "bossint_verified_email=" + encodeURIComponent(cleanEmail) + "; path=/; max-age=31536000; SameSite=Lax";
     } catch (e) {}
   </script>
 </body>
