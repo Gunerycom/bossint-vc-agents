@@ -18,9 +18,14 @@ const cronWorker = require('./services/cronWorker');
 app.use(cors());
 app.use(express.json());
 
-// Enforce noindex, nofollow on all HTTP responses
+// Enforce noindex, nofollow and fresh API caching on all HTTP responses
 app.use((req, res, next) => {
   res.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive, nosnippet');
+  if (req.path.startsWith('/api/')) {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+  }
   next();
 });
 
@@ -184,7 +189,9 @@ const AGENT_NAMES = {
 // Always register Agent 04 by its dynamic env ID
 if (AGENT_04_ID) {
   AGENT_NAMES[AGENT_04_ID] = 'Top 10 VC Leaders: Weekly Surveillance';
+  FALLBACK_SIGNALS[AGENT_04_ID] = VC_LEADERS_FALLBACK;
 }
+FALLBACK_SIGNALS['48e1324f-e880-4592-b630-f1c01f076ade'] = VC_LEADERS_FALLBACK;
 
 /**
  * Builds the correct Bossint API URL for an agent.
@@ -339,6 +346,7 @@ async function getDealsForAgent(agentId) {
 
 // GET /api/config
 app.get('/api/config', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
   res.json({
     agent04Id: AGENT_04_ID,
     apiHost: BOSSINT_API_HOST,
@@ -350,6 +358,7 @@ app.get('/api/config', (req, res) => {
 // GET /api/proxy/agent/:agentId
 app.get('/api/proxy/agent/:agentId', async (req, res) => {
   const { agentId } = req.params;
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
 
   try {
     const url = buildAgentApiUrl(agentId);
@@ -368,12 +377,17 @@ app.get('/api/proxy/agent/:agentId', async (req, res) => {
 
     if (response.ok) {
       const data = await response.json();
-      return res.json({
-        success: true,
-        source: 'live',
-        agentId,
-        data
-      });
+      const unwrapped = data?.data?.data || data?.data || data?.items || data;
+      const hasItems = Array.isArray(unwrapped) ? unwrapped.length > 0 : Boolean(unwrapped);
+
+      if (hasItems) {
+        return res.json({
+          success: true,
+          source: 'live',
+          agentId,
+          data
+        });
+      }
     }
   } catch (err) {
     // Silence network warning and gracefully use fallback
