@@ -95,7 +95,7 @@ async function fetchAgentSignals(agent) {
     const items = extractSignals(payload);
 
     if (items && items.length > 0) {
-      renderFeedItems(feedEl, items.slice(0, 3));
+      renderFeedItems(feedEl, items.slice(0, 4));
       if (statusEl) {
         statusEl.textContent = payload.source === 'live' ? 'LIVE' : 'ACTIVE';
         statusEl.classList.add('connected');
