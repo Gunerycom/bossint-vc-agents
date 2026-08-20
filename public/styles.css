@@ -293,11 +293,6 @@ body {
   gap: 1.25rem;
   position: relative;
   width: 100%;
-  transition: transform var(--transition-smooth), box-shadow var(--transition-smooth), border-color var(--transition-smooth);
-}
-
-.agent-card:active {
-  transform: scale(0.992);
 }
 
 .card-header {
@@ -1116,17 +1111,6 @@ body {
     gap: 0.85rem;
     border-radius: var(--radius-lg);
     background: var(--bg-card);
-    transition: transform 0.2s var(--ease-spring), box-shadow 0.2s var(--ease-spring), border-color 0.2s ease;
-  }
-
-  .agent-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-card-hover);
-    border-color: rgba(30, 78, 216, 0.2);
-  }
-
-  .agent-card:active {
-    transform: translateY(-1px);
   }
 
   .card-header {
