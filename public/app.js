@@ -11,30 +11,47 @@ const AGENTS = [
     id: 'c9ce09dc-833b-4ca6-b514-8bc896c47735',
     name: 'US AI Funding Rounds (Last 24h)',
     statusElId: 'status-c9ce09dc-833b-4ca6-b514-8bc896c47735',
-    feedElId: 'feed-c9ce09dc-833b-4ca6-b514-8bc896c47735'
+    feedElId: 'feed-c9ce09dc-833b-4ca6-b514-8bc896c47735',
+    noteElId: 'note-c9ce09dc-833b-4ca6-b514-8bc896c47735'
   },
   {
     index: '02',
     id: '167023b0-3a2c-44b5-9c16-39788d6cd4b7',
     name: 'Weekly AI Investment Digest',
     statusElId: 'status-167023b0-3a2c-44b5-9c16-39788d6cd4b7',
-    feedElId: 'feed-167023b0-3a2c-44b5-9c16-39788d6cd4b7'
+    feedElId: 'feed-167023b0-3a2c-44b5-9c16-39788d6cd4b7',
+    noteElId: 'note-167023b0-3a2c-44b5-9c16-39788d6cd4b7'
   },
   {
     index: '03',
     id: '1950ae01-3390-4a3f-a6c0-21a9f3aa91e9',
     name: 'MENA Investment Radar',
     statusElId: 'status-1950ae01-3390-4a3f-a6c0-21a9f3aa91e9',
-    feedElId: 'feed-1950ae01-3390-4a3f-a6c0-21a9f3aa91e9'
+    feedElId: 'feed-1950ae01-3390-4a3f-a6c0-21a9f3aa91e9',
+    noteElId: 'note-1950ae01-3390-4a3f-a6c0-21a9f3aa91e9'
   },
   {
     index: '04',
     id: '48e1324f-e880-4592-b630-f1c01f076ade',
     name: 'Top 10 VC Leaders: Weekly Surveillance',
     statusElId: 'status-agent-04',
-    feedElId: 'feed-agent-04'
+    feedElId: 'feed-agent-04',
+    noteElId: 'note-agent-04'
   }
 ];
+
+// Fallback Research Notes for 0ms Instant Mobile Loading
+const FALLBACK_NOTES = {
+  'c9ce09dc-833b-4ca6-b514-8bc896c47735': 'All items are included with placeholders for missing information as per user instructions. The data covers seed to late-stage rounds, with a focus on early-stage deals. Some entries are based on social media posts and may require further verification.',
+  '167023b0-3a2c-44b5-9c16-39788d6cd4b7': 'The data was sourced from tech news sites, AI-focused market watch platforms, and social media posts. All items fall within the requested time window.',
+  '1950ae01-3390-4a3f-a6c0-21a9f3aa91e9': 'The briefing covers major funding rounds, new fund launches, regional breakdown, and market trends. Data was sourced from web articles and social media posts, with a focus on Saudi Arabia, UAE, Qatar, and the wider Middle East.',
+  '48e1324f-e880-4592-b630-f1c01f076ade': 'Significant activities were found for Roelof Botha, Marc Andreessen, Reid Hoffman, Vinod Khosla, and Peter Thiel, while Rich Wong, Peter Fenton, John Doerr, Hemant Taneja, and Ravi Mhatre had no notable reported activity in the period. Sources include social media posts and news articles.'
+};
+
+FALLBACK_NOTES['01'] = FALLBACK_NOTES['c9ce09dc-833b-4ca6-b514-8bc896c47735'];
+FALLBACK_NOTES['02'] = FALLBACK_NOTES['167023b0-3a2c-44b5-9c16-39788d6cd4b7'];
+FALLBACK_NOTES['03'] = FALLBACK_NOTES['1950ae01-3390-4a3f-a6c0-21a9f3aa91e9'];
+FALLBACK_NOTES['04'] = FALLBACK_NOTES['48e1324f-e880-4592-b630-f1c01f076ade'];
 
 // Curated High-Fidelity Active Intelligence Signals for 0ms Instant Mobile Loading
 const FALLBACK_SIGNALS = {
@@ -173,6 +190,10 @@ function renderInitialSignals() {
   AGENTS.forEach(agent => {
     const feedEl = document.getElementById(agent.feedElId);
     const statusEl = document.getElementById(agent.statusElId);
+    const noteText = FALLBACK_NOTES[agent.id] || FALLBACK_NOTES[agent.index];
+    if (noteText) {
+      renderResearchNote(agent, noteText);
+    }
     if (!feedEl) return;
     const fallback = FALLBACK_SIGNALS[agent.id] || FALLBACK_SIGNALS[agent.index];
     if (fallback && fallback.length > 0) {
@@ -186,10 +207,36 @@ function renderInitialSignals() {
 }
 
 /**
+ * Updates or renders research note in the research-note-wrapper
+ */
+function renderResearchNote(agent, noteText) {
+  if (!agent || !noteText) return;
+  const noteEl = document.getElementById(agent.noteElId);
+  if (noteEl) {
+    const textEl = noteEl.querySelector('.research-note-text') || noteEl;
+    textEl.textContent = noteText;
+  }
+}
+
+/**
+ * Extracts research note from live agent API response ($.data.metadata.note)
+ */
+function extractResearchNote(payload) {
+  if (!payload) return null;
+  const raw = payload.data || payload;
+  if (raw?.data?.metadata?.note) return raw.data.metadata.note;
+  if (raw?.metadata?.note) return raw.metadata.note;
+  if (payload?.data?.metadata?.note) return payload.data.metadata.note;
+  if (payload?.metadata?.note) return payload.metadata.note;
+  if (payload?.note) return payload.note;
+  return null;
+}
+
+/**
  * Main application initializer with DOM safety for all mobile and desktop browsers
  */
 async function initApp() {
-  // 1. Instant 0ms render so mobile visitors immediately see top highlights
+  // 1. Instant 0ms render so mobile visitors immediately see top highlights & research notes
   renderInitialSignals();
 
   // 2. Fetch server configuration (e.g. dynamic Agent 04 UUID)
@@ -231,6 +278,7 @@ async function initConfiguration() {
           if (form04) form04.setAttribute('data-agent-id', config.agent04Id);
           // Also alias fallback
           FALLBACK_SIGNALS[config.agent04Id] = FALLBACK_SIGNALS['04'];
+          FALLBACK_NOTES[config.agent04Id] = FALLBACK_NOTES['04'];
         }
       }
     }
@@ -256,6 +304,10 @@ async function fetchAgentSignals(agent) {
     if (response.ok) {
       const payload = await response.json();
       let items = extractSignals(payload);
+      const liveNote = extractResearchNote(payload);
+      if (liveNote) {
+        renderResearchNote(agent, liveNote);
+      }
 
       if (!items || items.length === 0) {
         items = FALLBACK_SIGNALS[agent.id] || FALLBACK_SIGNALS[agent.index] || [];

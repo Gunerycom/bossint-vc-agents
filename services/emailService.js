@@ -143,7 +143,7 @@ async function sendAgentUpdateEmail(recipients, updatePayload) {
 
   const resend = getResendClient();
   const from = getFromAddress();
-  const { agentName, deals = [], report = null, headline = '', timestamp = 'Today' } = updatePayload;
+  const { agentName, deals = [], report = null, narrative = null, metadata = null, headline = '', timestamp = 'Today' } = updatePayload;
 
   if (!resend) {
     console.log(`[EmailService - DRY RUN] Would send Intel Alert for "${agentName}" with ${deals.length} deals to ${recipients.length} recipients.`);
@@ -160,6 +160,8 @@ async function sendAgentUpdateEmail(recipients, updatePayload) {
       agentName,
       deals,
       report,
+      narrative,
+      metadata,
       headline,
       timestamp,
       unsubscribeUrl

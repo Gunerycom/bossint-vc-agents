@@ -35,6 +35,9 @@ app.use(express.static(path.join(__dirname, 'public'), { index: false }));
 const FALLBACK_SIGNALS = {
   'c9ce09dc-833b-4ca6-b514-8bc896c47735': {
     agent_name: 'US AI Funding Rounds (Last 24h)',
+    metadata: {
+      note: 'All items are included with placeholders for missing information as per user instructions. The data covers seed to late-stage rounds, with a focus on early-stage deals. Some entries are based on social media posts and may require further verification.'
+    },
     items: [
       {
         title: 'inKind secures $414M Debt Financing led by Citi & Cross River',
@@ -72,6 +75,9 @@ const FALLBACK_SIGNALS = {
   },
   '167023b0-3a2c-44b5-9c16-39788d6cd4b7': {
     agent_name: 'Weekly AI Investment Digest',
+    metadata: {
+      note: 'The data was sourced from tech news sites, AI-focused market watch platforms, and social media posts. All items fall within the requested time window.'
+    },
     items: [
       {
         title: 'Databricks closes $5B Series at $190B valuation led by Coatue, Blackstone, MGX & T. Rowe Price',
@@ -108,6 +114,9 @@ const FALLBACK_SIGNALS = {
   },
   '1950ae01-3390-4a3f-a6c0-21a9f3aa91e9': {
     agent_name: 'MENA Investment Radar',
+    metadata: {
+      note: 'The briefing covers major funding rounds, new fund launches, regional breakdown, and market trends. Data was sourced from web articles and social media posts, with a focus on Saudi Arabia, UAE, Qatar, and the wider Middle East.'
+    },
     items: [
       {
         title: 'Yuno secures $45M Series B for AI payments led by GlobalPayTechVentures & a16z',
@@ -144,6 +153,9 @@ const FALLBACK_SIGNALS = {
 // Top 10 VC Leaders Fallback (matches real Agent 04 /latest schema)
 const VC_LEADERS_FALLBACK = {
   agent_name: 'Top 10 VC Leaders: Weekly Surveillance',
+  metadata: {
+    note: 'Significant activities were found for Roelof Botha, Marc Andreessen, Reid Hoffman, Vinod Khosla, and Peter Thiel, while Rich Wong, Peter Fenton, John Doerr, Hemant Taneja, and Ravi Mhatre had no notable reported activity in the period. Sources include social media posts and news articles.'
+  },
   items: [
     {
       title: 'Teamed up with Keith Rabois for the first time since PayPal on WithCoverage\'s $42M Series B led by Sequoia and Khosla.',

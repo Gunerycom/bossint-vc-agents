@@ -20,7 +20,8 @@
     "subscribedAt": "2026-08-17T20:35:09.745Z",
     "lastConfirmedAt": "2026-08-17T20:35:09.745Z",
     "unsubscribeToken": "e9e252e6d659614eb0a6fff25187175bd765",
-    "emailsSentCount": 0
+    "emailsSentCount": 1,
+    "lastEmailedAt": "2026-08-20T18:43:15.896Z"
   },
   {
     "id": "sub_1787024752804_83bcc8",
@@ -46,8 +47,8 @@
     "unsubscribeToken": "ec2147c7e293f54d3f0bd69275b577eed0f6",
     "subscribedAt": "2026-08-18T04:14:30.557Z",
     "lastConfirmedAt": "2026-08-18T04:14:30.557Z",
-    "lastEmailedAt": "2026-08-18T04:14:31.686Z",
-    "emailsSentCount": 1
+    "lastEmailedAt": "2026-08-20T18:43:16.422Z",
+    "emailsSentCount": 2
   },
   {
     "id": "sub_1787026626235_cb1cea",
@@ -59,8 +60,8 @@
     "unsubscribeToken": "a60180fd120ecc2feca600956770021a434a",
     "subscribedAt": "2026-08-18T04:17:06.235Z",
     "lastConfirmedAt": "2026-08-18T04:17:06.235Z",
-    "lastEmailedAt": "2026-08-18T04:17:07.709Z",
-    "emailsSentCount": 1
+    "lastEmailedAt": "2026-08-20T18:43:16.684Z",
+    "emailsSentCount": 2
   },
   {
     "id": "sub_1787029413065_f80e86",
@@ -72,8 +73,8 @@
     "unsubscribeToken": "0f67528db95b2c9af25c89e197223aa50174",
     "subscribedAt": "2026-08-18T05:03:33.065Z",
     "lastConfirmedAt": "2026-08-19T03:10:52.315Z",
-    "lastEmailedAt": "2026-08-19T03:10:54.218Z",
-    "emailsSentCount": 5,
+    "lastEmailedAt": "2026-08-20T18:43:20.660Z",
+    "emailsSentCount": 9,
     "verified": true,
     "verifiedAt": "2026-08-18T16:53:41.973Z",
     "verifyToken": "c7584f33a0ac50d6db6c20e5597b7328901a"
@@ -88,8 +89,8 @@
     "unsubscribeToken": "5ef0e11336d8b09330028e3400800f72aa12",
     "subscribedAt": "2026-08-18T05:16:57.630Z",
     "lastConfirmedAt": "2026-08-19T03:10:53.703Z",
-    "lastEmailedAt": "2026-08-19T03:10:54.219Z",
-    "emailsSentCount": 4,
+    "lastEmailedAt": "2026-08-20T18:43:20.660Z",
+    "emailsSentCount": 8,
     "verifyToken": "dff3d4bde3c4e5ba0f6b7918d4950f5ef6a8",
     "verified": true,
     "verifiedAt": "2026-08-18T16:53:41.973Z"
@@ -104,8 +105,8 @@
     "unsubscribeToken": "93dd1ab44b7fd5f2ae1c73885c8245a0085e",
     "subscribedAt": "2026-08-18T15:54:20.743Z",
     "lastConfirmedAt": "2026-08-18T16:53:41.973Z",
-    "lastEmailedAt": "2026-08-19T03:10:54.219Z",
-    "emailsSentCount": 3,
+    "lastEmailedAt": "2026-08-20T18:43:20.660Z",
+    "emailsSentCount": 7,
     "verifyToken": "be42893a36a611ddc7d0a34d46640b9c815d",
     "verified": true,
     "verifiedAt": "2026-08-18T16:53:41.973Z"
@@ -123,8 +124,8 @@
     "subscribedAt": "2026-08-18T16:07:50.505Z",
     "verifiedAt": "2026-08-18T16:07:50.738Z",
     "lastConfirmedAt": "2026-08-18T16:07:50.738Z",
-    "lastEmailedAt": "2026-08-18T16:37:41.548Z",
-    "emailsSentCount": 2
+    "lastEmailedAt": "2026-08-20T18:43:19.737Z",
+    "emailsSentCount": 4
   },
   {
     "id": "sub_1787070695796_b51388",
@@ -139,8 +140,8 @@
     "subscribedAt": "2026-08-18T16:31:35.795Z",
     "verifiedAt": "2026-08-18T16:53:41.973Z",
     "lastConfirmedAt": "2026-08-18T16:53:41.973Z",
-    "lastEmailedAt": "2026-08-19T03:10:54.219Z",
-    "emailsSentCount": 3
+    "lastEmailedAt": "2026-08-20T18:43:20.660Z",
+    "emailsSentCount": 7
   },
   {
     "id": "sub_1787071060142_476a50",
@@ -155,8 +156,8 @@
     "subscribedAt": "2026-08-18T16:37:40.141Z",
     "verifiedAt": "2026-08-18T16:37:40.141Z",
     "lastConfirmedAt": "2026-08-18T16:37:40.141Z",
-    "lastEmailedAt": "2026-08-18T16:37:41.548Z",
-    "emailsSentCount": 1
+    "lastEmailedAt": "2026-08-20T18:43:19.737Z",
+    "emailsSentCount": 3
   },
   {
     "id": "sub_1787071392642_ee076e",
@@ -187,8 +188,8 @@
     "subscribedAt": "2026-08-18T16:43:30.711Z",
     "verifiedAt": "2026-08-18T16:44:50.346Z",
     "lastConfirmedAt": "2026-08-18T16:44:50.346Z",
-    "lastEmailedAt": "2026-08-18T22:56:02.449Z",
-    "emailsSentCount": 2
+    "lastEmailedAt": "2026-08-20T18:43:20.013Z",
+    "emailsSentCount": 4
   },
   {
     "id": "sub_1787092881764_d76e3a",
@@ -219,8 +220,8 @@
     "subscribedAt": "2026-08-18T22:56:01.270Z",
     "verifiedAt": "2026-08-18T22:56:01.270Z",
     "lastConfirmedAt": "2026-08-18T22:56:01.270Z",
-    "lastEmailedAt": "2026-08-18T22:56:02.449Z",
-    "emailsSentCount": 1
+    "lastEmailedAt": "2026-08-20T18:43:20.013Z",
+    "emailsSentCount": 3
   },
   {
     "id": "sub_1787106327340_317d36",
@@ -235,8 +236,8 @@
     "subscribedAt": "2026-08-19T02:25:27.338Z",
     "verifiedAt": "2026-08-19T02:25:28.246Z",
     "lastConfirmedAt": "2026-08-19T02:25:31.225Z",
-    "lastEmailedAt": "2026-08-19T02:25:33.307Z",
-    "emailsSentCount": 2
+    "lastEmailedAt": "2026-08-20T18:43:18.771Z",
+    "emailsSentCount": 4
   },
   {
     "id": "sub_1787106328258_cceae8",
@@ -251,8 +252,8 @@
     "subscribedAt": "2026-08-19T02:25:28.257Z",
     "verifiedAt": "2026-08-19T02:25:28.257Z",
     "lastConfirmedAt": "2026-08-19T02:25:28.257Z",
-    "lastEmailedAt": "2026-08-19T02:25:33.307Z",
-    "emailsSentCount": 2
+    "lastEmailedAt": "2026-08-20T18:43:18.771Z",
+    "emailsSentCount": 4
   },
   {
     "id": "sub_1787108990111_cloon1",
@@ -267,7 +268,7 @@
     "subscribedAt": "2026-08-19T02:30:00.000Z",
     "verifiedAt": "2026-08-19T02:30:00.000Z",
     "lastConfirmedAt": "2026-08-19T02:42:36.778Z",
-    "lastEmailedAt": "2026-08-19T02:42:39.688Z",
-    "emailsSentCount": 2
+    "lastEmailedAt": "2026-08-20T18:43:19.030Z",
+    "emailsSentCount": 3
   }
 ]

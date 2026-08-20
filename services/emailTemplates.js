@@ -177,10 +177,25 @@ function renderAgentDataContent(agentName, payload) {
   const report = payload?.report || null;
   const narrative = payload?.narrative || null;
   const metadata = payload?.metadata || null;
+  const note = metadata?.note || payload?.note || null;
 
   let bodyHtml = '';
 
-  // 1. Multi-Section Institutional Report (e.g. MENA Investment Radar)
+  // 1. Research Note Wrapper (Rendered at the very top of each agent card)
+  if (note) {
+    bodyHtml += `
+      <div class="research-note-wrapper" style="background-color: #F8FAFC; border: 1px solid #E2E8F0; border-left: 3px solid #1E4ED8; border-radius: 6px; padding: 10px 14px; margin-bottom: 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+        <div style="font-size: 11px; font-weight: 700; color: #1E4ED8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">
+          RESEARCH NOTE
+        </div>
+        <div style="font-size: 12px; line-height: 1.5; color: #475569;">
+          ${escapeHtml(note)}
+        </div>
+      </div>
+    `;
+  }
+
+  // 2. Multi-Section Institutional Report (e.g. MENA Investment Radar)
   if (report) {
     if (report.summary) {
       bodyHtml += renderReportSection('Executive Summary', report.summary);
@@ -205,14 +220,14 @@ function renderAgentDataContent(agentName, payload) {
     }
   }
 
-  // 2. Narrative summary (e.g. US AI Funding / AI Digest)
+  // 3. Narrative summary (e.g. US AI Funding / AI Digest)
   if (narrative && !report) {
     if (narrative.headline || narrative.summary) {
       bodyHtml += renderReportSection('Surveillance Briefing', `${narrative.headline ? `**${narrative.headline}**\n\n` : ''}${narrative.summary || ''}`);
     }
   }
 
-  // 3. Deals / Leader items roster (ALL items rendered with NO SLICING)
+  // 4. Deals / Leader items roster (ALL items rendered with NO SLICING)
   if (deals && deals.length > 0) {
     const dealsHtml = deals.map(renderDealItem).join('');
     bodyHtml += `
@@ -223,15 +238,6 @@ function renderAgentDataContent(agentName, payload) {
         <div style="background-color: #F9F8F5; border: 1px solid #E8E5DD; border-radius: 10px; padding: 12px 12px 2px 12px; margin-bottom: 14px;">
           ${dealsHtml}
         </div>
-      </div>
-    `;
-  }
-
-  // 4. Metadata notes (e.g. crawler notes, sources count)
-  if (metadata?.note) {
-    bodyHtml += `
-      <div style="background-color: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 6px; padding: 10px 14px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 11px; color: #64748B; margin-top: 10px;">
-        <strong>Pipeline Note:</strong> ${escapeHtml(metadata.note)}
       </div>
     `;
   }
@@ -315,11 +321,12 @@ function renderWelcomeEmail({ agentName = 'VC & Investors Intel Feed', deals = [
 /**
  * 2. REAL-TIME INTEL SIGNAL ALERT EMAIL
  */
-function renderAgentUpdateEmail({ agentName = 'VC Intel Agent', deals = [], report = null, narrative = null, headline = '', timestamp = 'Today', unsubscribeUrl = '#' }) {
+function renderAgentUpdateEmail({ agentName = 'VC Intel Agent', deals = [], report = null, narrative = null, metadata = null, headline = '', timestamp = 'Today', unsubscribeUrl = '#' }) {
   const payload = {
     deals: Array.isArray(deals) ? deals : (deals?.deals || []),
     report: report || deals?.report || null,
-    narrative: narrative || deals?.narrative || null
+    narrative: narrative || deals?.narrative || null,
+    metadata: metadata || deals?.metadata || null
   };
 
   const contentHtml = renderAgentDataContent(agentName, payload);

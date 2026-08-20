@@ -204,6 +204,7 @@ async function checkAgentUpdates(agent, forceDispatch = false) {
           agentName: agent.name,
           deals,
           report,
+          metadata: json.data?.metadata || json.metadata || null,
           headline: report?.headline || (json.narrative?.headline) || '',
           timestamp: currentRunAt
         });
